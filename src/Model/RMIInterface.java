@@ -5,13 +5,14 @@
 package Model;
 
 import java.io.File;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
  *
  * @author mcnabba
  */
-public interface RMIInterface {
+public interface RMIInterface extends Remote {
     
     public File getFile() throws RemoteException;
 }

@@ -4,9 +4,13 @@
  */
 package Model;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author mcnabba
  */
-public class RMIClient {
+public class RMIClient implements RMIInterface {
     
     public static final String REGISTRY_URL = "localhost";
     
@@ -22,13 +26,27 @@ public class RMIClient {
         
     }
     
-    public Registry getRegistry()   {
-        Registry registry = null;
+    public static void main(String[] args)  {
+        RMIClient client = new RMIClient();
         try {
-            registry = LocateRegistry.getRegistry(REGISTRY_URL);
+            RMIInterface stub = (RMIInterface) UnicastRemoteObject.exportObject(client, 0);
+            Registry registry = LocateRegistry.getRegistry(REGISTRY_URL);
+            registry.rebind("stub", stub);
+            System.out.println("stubs in registry");
+            try {
+                String[] bindings = Naming.list(REGISTRY_URL);
+                
+            }   catch (MalformedURLException e)     {
+                System.out.println("error retrieving names " + e);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return registry;
+    }
+    
+
+    @Override
+    public File getFile() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
