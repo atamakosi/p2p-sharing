@@ -28,11 +28,11 @@ public class UI extends javax.swing.JFrame {
         mainPnl = new javax.swing.JPanel();
         toolbarPnl = new javax.swing.JPanel();
         filelistPnl = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
+        lineSep = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
-        fileItem = new javax.swing.JMenu();
-        connectItem = new javax.swing.JMenuItem();
-        exitItem = new javax.swing.JMenuItem();
+        fileItm = new javax.swing.JMenu();
+        connectItm = new javax.swing.JMenuItem();
+        exitItm = new javax.swing.JMenuItem();
         editItem = new javax.swing.JMenu();
         settingsItem = new javax.swing.JMenuItem();
 
@@ -68,7 +68,7 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(lineSep, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addComponent(toolbarPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -77,7 +77,7 @@ public class UI extends javax.swing.JFrame {
             .addGroup(mainPnlLayout.createSequentialGroup()
                 .addComponent(toolbarPnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lineSep, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -85,20 +85,20 @@ public class UI extends javax.swing.JFrame {
 
         getContentPane().add(mainPnl, java.awt.BorderLayout.CENTER);
 
-        fileItem.setText("File");
+        fileItm.setText("File");
 
-        connectItem.setText("Connect...");
-        fileItem.add(connectItem);
+        connectItm.setText("Connect...");
+        fileItm.add(connectItm);
 
-        exitItem.setText("Exit");
-        exitItem.addActionListener(new java.awt.event.ActionListener() {
+        exitItm.setText("Exit");
+        exitItm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitItemActionPerformed(evt);
+                exitItmActionPerformed(evt);
             }
         });
-        fileItem.add(exitItem);
+        fileItm.add(exitItm);
 
-        menuBar.add(fileItem);
+        menuBar.add(fileItm);
 
         editItem.setText("Edit");
 
@@ -112,9 +112,9 @@ public class UI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
+    private void exitItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItmActionPerformed
         dispose();
-    }//GEN-LAST:event_exitItemActionPerformed
+    }//GEN-LAST:event_exitItmActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,12 +152,12 @@ public class UI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem connectItem;
+    private javax.swing.JMenuItem connectItm;
     private javax.swing.JMenu editItem;
-    private javax.swing.JMenuItem exitItem;
-    private javax.swing.JMenu fileItem;
+    private javax.swing.JMenuItem exitItm;
+    private javax.swing.JMenu fileItm;
     private javax.swing.JPanel filelistPnl;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator lineSep;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem settingsItem;

@@ -4,22 +4,22 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="fileItem">
+        <Menu class="javax.swing.JMenu" name="fileItm">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="connectItem">
+            <MenuItem class="javax.swing.JMenuItem" name="connectItm">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Connect..."/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="exitItem">
+            <MenuItem class="javax.swing.JMenuItem" name="exitItm">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Exit"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitItemActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitItmActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -75,7 +75,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="filelistPnl" max="32767" attributes="0"/>
-                      <Component id="jSeparator1" alignment="0" pref="380" max="32767" attributes="0"/>
+                      <Component id="lineSep" alignment="0" pref="380" max="32767" attributes="0"/>
                       <Component id="toolbarPnl" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -87,7 +87,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="toolbarPnl" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jSeparator1" min="-2" pref="7" max="-2" attributes="0"/>
+                  <Component id="lineSep" min="-2" pref="7" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="filelistPnl" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -126,7 +126,7 @@
             </DimensionLayout>
           </Layout>
         </Container>
-        <Component class="javax.swing.JSeparator" name="jSeparator1">
+        <Component class="javax.swing.JSeparator" name="lineSep">
         </Component>
       </SubComponents>
     </Container>
