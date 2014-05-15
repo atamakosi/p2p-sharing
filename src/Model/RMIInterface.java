@@ -22,7 +22,7 @@ public interface RMIInterface extends Remote {
      */
     public void getFile(String fileName) throws RemoteException;
     
-    public List<File> getAvailableFiles() throws RemoteException;
+    public List<String> getAvailableFiles() throws RemoteException;
     
     
 }
