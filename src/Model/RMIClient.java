@@ -6,7 +6,10 @@ package Model;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -32,9 +35,9 @@ public class RMIClient implements RMIInterface {
     public void start() {
         try {
             RMIInterface stub = (RMIInterface) UnicastRemoteObject.exportObject(this, 0);
-            extRegistry = LocateRegistry.createRegistry(REGISTRY_PORT);
-            extRegistry.rebind("stub", stub);
-        } catch (RemoteException ex) {
+            extRegistry = LocateRegistry.getRegistry();
+            extRegistry.bind(RMIInterface.class.getSimpleName(), stub);
+        } catch (RemoteException | AlreadyBoundException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         printRegistry();
@@ -56,15 +59,18 @@ public class RMIClient implements RMIInterface {
             for (String str : bindings )    {
                 System.out.println(str);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (RemoteException | MalformedURLException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public File getFile() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void getFile(File f) throws RemoteException {
+        try {
+            RMIInterface stub = (RMIInterface) intRegistry.lookup(RMIInterface.class.getSimpleName());
+            stub.getFile(f);    
+        } catch (NotBoundException | AccessException ex) {
+            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

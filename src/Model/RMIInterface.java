@@ -14,5 +14,10 @@ import java.rmi.RemoteException;
  */
 public interface RMIInterface extends Remote {
     
-    public File getFile() throws RemoteException;
+    /**
+     *
+     * @param f
+     * @throws RemoteException
+     */
+    public void getFile(File f) throws RemoteException;
 }
