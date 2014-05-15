@@ -26,14 +26,15 @@ import java.util.logging.Logger;
  *
  * @author mcnabba
  */
-public class RMIClient implements RMIInterface {
+public class RMIClientServer implements RMIInterface {
     
-    private static final String REGISTRY_URL = "localhost";
+    private static String url = "localhost";
     private static final int REGISTRY_PORT = 1099;
     private static Registry remoteRegistry;
-    private static Registry intRegistry;
+    private static Registry localRegistry;
     
-    public RMIClient()  {
+    public RMIClientServer(String url)  {
+        this.url = url;
         start();
     }
     
@@ -43,17 +44,17 @@ public class RMIClient implements RMIInterface {
             remoteRegistry = LocateRegistry.createRegistry(REGISTRY_PORT);
             remoteRegistry.bind(RMIInterface.class.getSimpleName(), stub);
         } catch (RemoteException | AlreadyBoundException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
     public void connect()   {
         try {
-            intRegistry = LocateRegistry.getRegistry(REGISTRY_URL);
+            localRegistry = LocateRegistry.getRegistry(url);
             printRegistry();
         } catch (RemoteException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -65,26 +66,26 @@ public class RMIClient implements RMIInterface {
                 System.out.println(str);
             }
         } catch (RemoteException | MalformedURLException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public ServerSocket createServerSocket()  {
-        RMIServerSocketFactory rf = new RMIServerSocketFactory();
-        
-    }
-    
-    public Socket createSocket(String str, int param)    {
-        RMIClientSocketFactory rs = RMIClientSocketFactory();
-    }
+//    public ServerSocket createServerSocket()  {
+//        RMIServerSocketFactory rf = new RMIServerSocketFactory();
+//        
+//    }
+//    
+//    public Socket createSocket(String str, int param)    {
+//        RMIClientSocketFactory rs = RMIClientSocketFactory();
+//    }
 
     @Override
     public void getFile(String f) throws RemoteException {
         try {
-            RMIInterface stub = (RMIInterface) intRegistry.lookup(RMIInterface.class.getSimpleName());
+            RMIInterface stub = (RMIInterface) localRegistry.lookup(RMIInterface.class.getSimpleName());
             stub.getFile(f);    
         } catch (NotBoundException | AccessException ex) {
-            Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

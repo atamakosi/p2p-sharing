@@ -1,6 +1,6 @@
 package View;
 
-import Model.RMIClient;
+import Model.RMIClientServer;
 
 /*
  * To change this template, choose Tools | Templates
@@ -152,7 +152,7 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitItmActionPerformed
 
     private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
-        RMIClient client = new RMIClient();
+        RMIClientServer client = new RMIClientServer();
         client.connect();
 
     }//GEN-LAST:event_connectItmActionPerformed
