@@ -7,6 +7,7 @@ package Model;
 import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -19,5 +20,9 @@ public interface RMIInterface extends Remote {
      * @param f
      * @throws RemoteException
      */
-    public void getFile(File f) throws RemoteException;
+    public void getFile(String fileName) throws RemoteException;
+    
+    public List<File> getAvailableFiles() throws RemoteException;
+    
+    
 }

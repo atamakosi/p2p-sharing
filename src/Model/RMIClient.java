@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,7 @@ public class RMIClient implements RMIInterface {
     
     private static final String REGISTRY_URL = "localhost";
     private static final int REGISTRY_PORT = 1099;
-    private static Registry extRegistry;
+    private static Registry remoteRegistry;
     private static Registry intRegistry;
     
     public RMIClient()  {
@@ -35,12 +37,13 @@ public class RMIClient implements RMIInterface {
     public void start() {
         try {
             RMIInterface stub = (RMIInterface) UnicastRemoteObject.exportObject(this, 0);
-            extRegistry = LocateRegistry.getRegistry();
-            extRegistry.bind(RMIInterface.class.getSimpleName(), stub);
+            remoteRegistry = LocateRegistry.createRegistry(REGISTRY_PORT);
+            remoteRegistry.bind(RMIInterface.class.getSimpleName(), stub);
+            printRegistry();
         } catch (RemoteException | AlreadyBoundException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        printRegistry();
+        
     }
     
     public void connect()   {
@@ -65,12 +68,18 @@ public class RMIClient implements RMIInterface {
     }
 
     @Override
-    public void getFile(File f) throws RemoteException {
+    public void getFile(String f) throws RemoteException {
         try {
             RMIInterface stub = (RMIInterface) intRegistry.lookup(RMIInterface.class.getSimpleName());
             stub.getFile(f);    
         } catch (NotBoundException | AccessException ex) {
             Logger.getLogger(RMIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<File> getAvailableFiles() throws RemoteException {
+            List<File> files = new ArrayList<>();
+            return files;
     }
 }
