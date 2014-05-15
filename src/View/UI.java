@@ -1,3 +1,4 @@
+package View;
 
 import Model.RMIClient;
 import View.Settings;
@@ -133,7 +134,8 @@ public class UI extends javax.swing.JFrame {
 
     private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
         RMIClient client = new RMIClient();
-        client.start();
+        client.connect();
+
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
