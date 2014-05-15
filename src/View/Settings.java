@@ -4,6 +4,10 @@
  */
 package View;
 
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 /**
  *
  * @author mcnabba
@@ -11,6 +15,7 @@ package View;
 public class Settings extends javax.swing.JDialog {
 
     private final String TITLE = "Settings";
+    private final String SERVER = "Server";
     
     /**
      * Creates new form Settings
@@ -23,6 +28,14 @@ public class Settings extends javax.swing.JDialog {
         this.setResizable(false);
         this.setAlwaysOnTop(true);
         this.setLayout(new java.awt.BorderLayout());
+        JPanel sidePnl = new JPanel();
+        JTextField serverTxtFld = new JTextField();
+        serverTxtFld.setEditable(false);
+        serverTxtFld.setText(SERVER);
+        sidePnl.add(serverTxtFld);
+        
+        this.add(sidePnl, BorderLayout.WEST);
+        
     }
 
     /**
