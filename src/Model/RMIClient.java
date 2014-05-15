@@ -70,7 +70,7 @@ public class RMIClient implements RMIInterface {
     }
     
     public ServerSocket createServerSocket()  {
-        RMIServerSocketFactory rf = RMIServerSocketFactory();
+        RMIServerSocketFactory rf = new RMIServerSocketFactory();
         
     }
     

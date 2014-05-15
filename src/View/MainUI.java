@@ -1,7 +1,6 @@
 package View;
 
 import Model.RMIClient;
-import View.Settings;
 
 /*
  * To change this template, choose Tools | Templates
@@ -12,12 +11,12 @@ import View.Settings;
  *
  * @author mcnabba
  */
-public class UI extends javax.swing.JFrame {
+public class MainUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form UI
+     * Creates new form MainUI
      */
-    public UI() {
+    public MainUI() {
         initComponents();
         this.setSize(800, 800);
     }
@@ -33,6 +32,9 @@ public class UI extends javax.swing.JFrame {
 
         mainPnl = new javax.swing.JPanel();
         toolbarPnl = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         filelistPnl = new javax.swing.JPanel();
         lineSep = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
@@ -44,15 +46,32 @@ public class UI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButton1.setText("Start");
+
+        jButton2.setText("Pause");
+
+        jButton3.setText("Stop");
+
         javax.swing.GroupLayout toolbarPnlLayout = new javax.swing.GroupLayout(toolbarPnl);
         toolbarPnl.setLayout(toolbarPnlLayout);
         toolbarPnlLayout.setHorizontalGroup(
             toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(toolbarPnlLayout.createSequentialGroup()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         toolbarPnlLayout.setVerticalGroup(
             toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, toolbarPnlLayout.createSequentialGroup()
+                .addGap(0, 11, Short.MAX_VALUE)
+                .addGroup(toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)))
         );
 
         javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(filelistPnl);
@@ -63,7 +82,7 @@ public class UI extends javax.swing.JFrame {
         );
         filelistPnlLayout.setVerticalGroup(
             filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 217, Short.MAX_VALUE)
+            .addGap(0, 215, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout mainPnlLayout = new javax.swing.GroupLayout(mainPnl);
@@ -139,7 +158,7 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
-        Settings settings = new Settings(this, false);
+        SettingsUI settings = new SettingsUI(this, false);
         settings.setVisible(true);
     }//GEN-LAST:event_settingsItemActionPerformed
 
@@ -160,13 +179,13 @@ public class UI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -174,7 +193,7 @@ public class UI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new UI().setVisible(true);
+                new MainUI().setVisible(true);
             }
         });
     }
@@ -184,6 +203,9 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileItm;
     private javax.swing.JPanel filelistPnl;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JSeparator lineSep;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
