@@ -26,35 +26,38 @@ public class UI extends javax.swing.JFrame {
     private void initComponents() {
 
         mainPnl = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        toolbarPnl = new javax.swing.JPanel();
+        filelistPnl = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
         fileItem = new javax.swing.JMenu();
+        connectItem = new javax.swing.JMenuItem();
         exitItem = new javax.swing.JMenuItem();
         editItem = new javax.swing.JMenu();
+        settingsItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout toolbarPnlLayout = new javax.swing.GroupLayout(toolbarPnl);
+        toolbarPnl.setLayout(toolbarPnlLayout);
+        toolbarPnlLayout.setHorizontalGroup(
+            toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        toolbarPnlLayout.setVerticalGroup(
+            toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 32, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+        javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(filelistPnl);
+        filelistPnl.setLayout(filelistPnlLayout);
+        filelistPnlLayout.setHorizontalGroup(
+            filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 230, Short.MAX_VALUE)
+        filelistPnlLayout.setVerticalGroup(
+            filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 217, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout mainPnlLayout = new javax.swing.GroupLayout(mainPnl);
@@ -64,22 +67,28 @@ public class UI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPnlLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(toolbarPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         mainPnlLayout.setVerticalGroup(
             mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPnlLayout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(toolbarPnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         getContentPane().add(mainPnl, java.awt.BorderLayout.CENTER);
 
         fileItem.setText("File");
+
+        connectItem.setText("Connect...");
+        fileItem.add(connectItem);
 
         exitItem.setText("Exit");
         exitItem.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +101,10 @@ public class UI extends javax.swing.JFrame {
         menuBar.add(fileItem);
 
         editItem.setText("Edit");
+
+        settingsItem.setText("Settings");
+        editItem.add(settingsItem);
+
         menuBar.add(editItem);
 
         setJMenuBar(menuBar);
@@ -132,18 +145,22 @@ public class UI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new UI().setVisible(true);
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem connectItem;
     private javax.swing.JMenu editItem;
     private javax.swing.JMenuItem exitItem;
     private javax.swing.JMenu fileItem;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel filelistPnl;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem settingsItem;
+    private javax.swing.JPanel toolbarPnl;
     // End of variables declaration//GEN-END:variables
 }
