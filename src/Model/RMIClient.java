@@ -20,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class RMIClient implements RMIInterface {
     
-    public static final String REGISTRY_URL = "localhost";
+    private static final String REGISTRY_URL = "localhost";
+    private static final int REGISTRY_PORT = 1099;
     
     public RMIClient()  {
         
@@ -29,7 +30,7 @@ public class RMIClient implements RMIInterface {
     public void start() {
         try {
         RMIInterface stub = (RMIInterface) UnicastRemoteObject.exportObject(this, 0);
-        Registry registry = LocateRegistry.getRegistry(REGISTRY_URL);
+        Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind("stub", stub);
         System.out.println("stubs in registry");
         try {
