@@ -1,3 +1,7 @@
+
+import Model.RMIClient;
+import View.Settings;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -14,6 +18,7 @@ public class UI extends javax.swing.JFrame {
      */
     public UI() {
         initComponents();
+        this.setSize(800, 800);
     }
 
     /**
@@ -88,6 +93,11 @@ public class UI extends javax.swing.JFrame {
         fileItm.setText("File");
 
         connectItm.setText("Connect...");
+        connectItm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectItmActionPerformed(evt);
+            }
+        });
         fileItm.add(connectItm);
 
         exitItm.setText("Exit");
@@ -103,6 +113,11 @@ public class UI extends javax.swing.JFrame {
         editItem.setText("Edit");
 
         settingsItem.setText("Settings");
+        settingsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsItemActionPerformed(evt);
+            }
+        });
         editItem.add(settingsItem);
 
         menuBar.add(editItem);
@@ -115,6 +130,16 @@ public class UI extends javax.swing.JFrame {
     private void exitItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItmActionPerformed
         dispose();
     }//GEN-LAST:event_exitItmActionPerformed
+
+    private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
+        RMIClient client = new RMIClient();
+        client.start();
+    }//GEN-LAST:event_connectItmActionPerformed
+
+    private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
+        Settings settings = new Settings(this, false);
+        settings.setVisible(true);
+    }//GEN-LAST:event_settingsItemActionPerformed
 
     /**
      * @param args the command line arguments
