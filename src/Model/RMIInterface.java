@@ -4,10 +4,14 @@
  */
 package Model;
 
+import java.io.File;
+import java.rmi.RemoteException;
+
 /**
  *
  * @author mcnabba
  */
-public class RMIInterface {
+public interface RMIInterface {
     
+    public File getFile() throws RemoteException;
 }
