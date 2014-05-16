@@ -4,13 +4,14 @@
  */
 package Model;
 
+import java.io.Serializable;
 import java.net.Socket;
 
 /**
  *
  * @author mcnabba
  */
-public class PeerNode {
+public class PeerNode implements Serializable {
     
     private Socket socket;
     
