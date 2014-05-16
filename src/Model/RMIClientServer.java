@@ -26,22 +26,26 @@ import java.util.logging.Logger;
  *
  * @author mcnabba
  */
-public class RMIClientServer implements RMIInterface {
+public class RMIClientServer extends UnicastRemoteObject implements RMIInterface {
     
     private static String url = "localhost";
     private static final int REGISTRY_PORT = 1099;
     private static Registry remoteRegistry;
     private static Registry localRegistry;
     
-    public RMIClientServer(String url)  {
+    public RMIClientServer(String url) throws RemoteException {
+        super();
         this.url = url;
-        start();
+    }
+
+    private RMIClientServer() throws RemoteException {
+        super();
     }
     
-    public void start() {
+    public void startLocalServer() {
         try {
-            RMIInterface stub = (RMIInterface) UnicastRemoteObject.exportObject(this, 0);
-            remoteRegistry = LocateRegistry.createRegistry(REGISTRY_PORT);
+            RMIInterface stub = new RMIClientServer();
+            remoteRegistry = LocateRegistry.getRegistry();
             remoteRegistry.bind(RMIInterface.class.getSimpleName(), stub);
         } catch (RemoteException | AlreadyBoundException ex) {
             Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,11 +53,12 @@ public class RMIClientServer implements RMIInterface {
         
     }
     
-    public void connect()   {
+    public void connectToRemote()   {
         try {
             localRegistry = LocateRegistry.getRegistry(url);
+            RMIInterface server = (RMIClientServer) localRegistry.lookup(RMIInterface.class.getSimpleName());
             printRegistry();
-        } catch (RemoteException ex) {
+        } catch (NotBoundException | RemoteException ex) {
             Logger.getLogger(RMIClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -61,7 +66,7 @@ public class RMIClientServer implements RMIInterface {
     public void printRegistry() {
         try {
             System.out.println("stubs in registry");
-            String[] bindings = Naming.list(REGISTRY_URL);
+            String[] bindings = Naming.list(url);
             for (String str : bindings )    {
                 System.out.println(str);
             }

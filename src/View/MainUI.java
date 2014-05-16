@@ -12,6 +12,8 @@ import Model.RMIClientServer;
  * @author mcnabba
  */
 public class MainUI extends javax.swing.JFrame {
+    
+    private RMIClientServer localCS;
 
     /**
      * Creates new form MainUI
@@ -19,6 +21,7 @@ public class MainUI extends javax.swing.JFrame {
     public MainUI() {
         initComponents();
         this.setSize(800, 800);
+//        localCS = new RMIClientServer();
     }
 
     /**
@@ -152,8 +155,6 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitItmActionPerformed
 
     private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
-        RMIClientServer client = new RMIClientServer();
-        client.connect();
 
     }//GEN-LAST:event_connectItmActionPerformed
 
