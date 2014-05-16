@@ -18,7 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Class that will listen for requests from other peers.  If packet received, 
+ * will create a PeerNode object and store in a List for referencing later.  Believe
+ * this blocks until data received, hence the need to decouple server and client.
  * @author mcnabba
  */
 public class PeerServer implements Runnable {
@@ -67,6 +69,10 @@ public class PeerServer implements Runnable {
         }
     }
     
+    /**
+     * fetches all discovered peers in the List
+     * @return 
+     */
     public List<PeerNode> getPeers()   {
         return this.peers;
     }
@@ -74,5 +80,13 @@ public class PeerServer implements Runnable {
     
     public void stop()  {
         run = false;
+    }
+    
+    /**
+     * fetches socket info for the local PeerNode
+     * @return 
+     */
+    public ServerSocket getSocket() {
+        return this.serverSocket;
     }
 }

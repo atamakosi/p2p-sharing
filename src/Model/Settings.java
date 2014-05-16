@@ -11,12 +11,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Class to read config.xml and instantiate into object for referencing
  * @author mcnabba
  */
 public class Settings {

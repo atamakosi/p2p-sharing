@@ -5,21 +5,22 @@
 package Model;
 
 import java.io.Serializable;
-import java.net.Socket;
+import java.net.ServerSocket;
 
 /**
- *
+ * Class used to pass local socket information to peers.  Goal is to allow a peer 
+ * to store discovered peers in a data collection.
  * @author mcnabba
  */
 public class PeerNode implements Serializable {
     
-    private Socket socket;
+    private ServerSocket socket;
     
-    public PeerNode(Socket s)   {
+    public PeerNode(ServerSocket s)   {
         this.socket = s;
     }
     
-    public Socket getSocket()   {
+    public ServerSocket getSocket()   {
         return this.socket;
     }
     

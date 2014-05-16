@@ -10,7 +10,7 @@ import Model.RMIClientServer;
  */
 
 /**
- *
+ * 
  * @author mcnabba
  */
 public class MainUI extends javax.swing.JFrame {
@@ -18,6 +18,7 @@ public class MainUI extends javax.swing.JFrame {
     private RMIClientServer localCS;
     private PeerServer server;
     private PeerNode node;
+    private final int PORT = 33000;
 
     /**
      * Creates new form MainUI
@@ -27,6 +28,7 @@ public class MainUI extends javax.swing.JFrame {
         this.setSize(800, 800);
 //        localCS = new RMIClientServer();
         server = new PeerServer();
+        node = new PeerNode(server.getSocket());
     }
 
     /**

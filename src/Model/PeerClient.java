@@ -12,13 +12,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Class intended to broadcast data about this peer to other peers.  To reduce
+ * traffic and load, will only broadcast at a set interval.
  * @author mcnabba
  */
 public class PeerClient implements Runnable {
