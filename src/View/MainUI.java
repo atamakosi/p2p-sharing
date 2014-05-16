@@ -1,5 +1,7 @@
 package View;
 
+import Model.PeerNode;
+import Model.PeerServer;
 import Model.RMIClientServer;
 
 /*
@@ -14,6 +16,8 @@ import Model.RMIClientServer;
 public class MainUI extends javax.swing.JFrame {
     
     private RMIClientServer localCS;
+    private PeerServer server;
+    private PeerNode node;
 
     /**
      * Creates new form MainUI
@@ -22,6 +26,7 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
         this.setSize(800, 800);
 //        localCS = new RMIClientServer();
+        server = new PeerServer();
     }
 
     /**
@@ -35,9 +40,9 @@ public class MainUI extends javax.swing.JFrame {
 
         mainPnl = new javax.swing.JPanel();
         toolbarPnl = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        startBtn = new javax.swing.JButton();
+        pauseBtn = new javax.swing.JButton();
+        stopBtn = new javax.swing.JButton();
         filelistPnl = new javax.swing.JPanel();
         lineSep = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
@@ -49,22 +54,22 @@ public class MainUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Start");
+        startBtn.setText("Start");
 
-        jButton2.setText("Pause");
+        pauseBtn.setText("Pause");
 
-        jButton3.setText("Stop");
+        stopBtn.setText("Stop");
 
         javax.swing.GroupLayout toolbarPnlLayout = new javax.swing.GroupLayout(toolbarPnl);
         toolbarPnl.setLayout(toolbarPnlLayout);
         toolbarPnlLayout.setHorizontalGroup(
             toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(toolbarPnlLayout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(startBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(pauseBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(stopBtn)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         toolbarPnlLayout.setVerticalGroup(
@@ -72,9 +77,9 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, toolbarPnlLayout.createSequentialGroup()
                 .addGap(0, 11, Short.MAX_VALUE)
                 .addGroup(toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(startBtn)
+                    .addComponent(pauseBtn)
+                    .addComponent(stopBtn)))
         );
 
         javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(filelistPnl);
@@ -155,9 +160,17 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitItmActionPerformed
 
     private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
-
+        
     }//GEN-LAST:event_connectItmActionPerformed
 
+    private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        server.run();
+    }
+    
+    private void stopBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        server.stop();
+    }
+    
     private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
         SettingsUI settings = new SettingsUI(this, false);
         settings.setVisible(true);
@@ -204,9 +217,9 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileItm;
     private javax.swing.JPanel filelistPnl;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton startBtn;
+    private javax.swing.JButton pauseBtn;
+    private javax.swing.JButton stopBtn;
     private javax.swing.JSeparator lineSep;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
