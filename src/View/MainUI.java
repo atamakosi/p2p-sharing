@@ -27,9 +27,7 @@ public class MainUI extends javax.swing.JFrame {
      */
     public MainUI() {
         initComponents();
-        this.setSize(800, 800);
-//        PeerNode node = new PeerNode();
-      
+        this.setSize(800, 800);     
     }
     
     public void setNode(PeerNode node)  {
@@ -170,12 +168,12 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("Starting node...");
         node.start();
-       
     }
     
     private void stopBtnActionPerformed(java.awt.event.ActionEvent evt) {
-//        server.stop();
+        System.out.println("Stopping node...");
         node.stop();
     }
     

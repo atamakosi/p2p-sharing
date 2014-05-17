@@ -17,8 +17,8 @@ public class Main {
         
     public static void main(String[] args)  {
         PeerNode p = new PeerNode();
-        Thread th = new Thread(p);
-        th.start();
+        System.out.println(p.toString());
+        p.start();
         MainUI ui = new MainUI();
         ui.setVisible(true);
         ui.setNode(p);

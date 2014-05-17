@@ -4,10 +4,7 @@
  */
 package Model;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -20,36 +17,44 @@ import java.util.logging.Logger;
  * to store discovered peers in a data collection.
  * @author mcnabba
  */
-public class PeerNode implements Runnable {
+public class PeerNode  {
        
-    private int port;
-    private List<PeerNode> peers;
+    private final int PORT = 33000;
+    private static List<PeerNode> peers;
     private boolean run = true;
-    private Socket localSocket;
+    private Socket s;
+    private Thread commsThread;
+    private Thread discThread;
+    private PeerComms pComms;
+    private PeerDiscovery pDisc;
     
     public PeerNode()   {
         peers = new ArrayList<>();
+        pDisc = new PeerDiscovery(peers);
+        pComms = new PeerComms();
+        commsThread = new Thread(pComms);
+        discThread = new Thread(pDisc);
+        
     }
-    
+
     public PeerNode(Socket s)   {
-        this.port = s.getPort();
-        peers = new ArrayList<>();
+        this.s = s;
     }
  
     public void sendFileName(String fileName, Socket s)  {
-        try (Socket socket = s) 
-         {
-            PrintWriter out = new PrintWriter( socket.getOutputStream(), true );
-            System.out.println("Sending file " + fileName);
-            out.println(fileName);
-            out.close();
-        } catch (IOException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
     
     public void stop()  {
-        run = false;
+        pComms.stopRun();
+        pDisc.stopRun();
+        try {
+            
+            commsThread.join();
+            discThread.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public List<PeerNode> getPeers()    {
@@ -68,26 +73,8 @@ public class PeerNode implements Runnable {
     }
     
     public void start() {
-        run = true;
-        run();
-    }
-
-    @Override
-    public void run() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(0);
-            System.out.println("Listening on port " + serverSocket.getLocalPort());
-            while (run) {
-                Socket connection = serverSocket.accept();
-                PeerNode p = new PeerNode(connection);
-                if (!peers.contains(p)) {
-                    synchronized (peers)    {
-                        peers.add(p);
-                    }
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println("Threads starting...");
+        commsThread.start();
+        discThread.start(); 
     }
 }
