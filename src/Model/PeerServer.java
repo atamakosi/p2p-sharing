@@ -60,7 +60,7 @@ public class PeerServer implements Runnable {
                 is.close();
                 dSock.close();
 //                conn = serverSocket.accept();
-                System.out.println("peer socket " + n.getSocket());
+//                System.out.println("peer socket " + n.getSocket());
                 peers.add(n);
                 System.out.println("number of peers " + peers.size());
             } catch (IOException ex) {

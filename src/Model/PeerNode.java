@@ -5,7 +5,7 @@
 package Model;
 
 import java.io.Serializable;
-import java.net.ServerSocket;
+import java.net.InetAddress;
 
 /**
  * Class used to pass local socket information to peers.  Goal is to allow a peer 
@@ -14,14 +14,20 @@ import java.net.ServerSocket;
  */
 public class PeerNode implements Serializable {
     
-    private ServerSocket socket;
+    private InetAddress address;
+    private int data;
     
-    public PeerNode(ServerSocket s)   {
-        this.socket = s;
+    public PeerNode(InetAddress address, int data)   {
+        this.address = address;
+        this.data = data;
     }
     
-    public ServerSocket getSocket()   {
-        return this.socket;
+    public PeerNode(InetAddress address)    {
+        this.address = address;
     }
     
+    @Override
+    public String toString()    {
+        return this.address.toString();
+    }
 }

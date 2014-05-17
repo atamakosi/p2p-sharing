@@ -1,8 +1,13 @@
 package View;
 
+import Model.PeerDiscovery;
 import Model.PeerNode;
 import Model.PeerServer;
 import Model.RMIClientServer;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -16,7 +21,8 @@ import Model.RMIClientServer;
 public class MainUI extends javax.swing.JFrame {
     
     private RMIClientServer localCS;
-    private PeerServer server;
+//    private PeerServer server;
+    private PeerDiscovery disco = null;
     private PeerNode node;
     private final int PORT = 33000;
 
@@ -26,9 +32,11 @@ public class MainUI extends javax.swing.JFrame {
     public MainUI() {
         initComponents();
         this.setSize(800, 800);
+        
 //        localCS = new RMIClientServer();
-        server = new PeerServer();
-        node = new PeerNode(server.getSocket());
+//        server = new PeerServer();
+//        node = new PeerNode(server.getSocket());
+      
     }
 
     /**
@@ -166,11 +174,11 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        server.run();
+//        server.run();
     }
     
     private void stopBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        server.stop();
+//        server.stop();
     }
     
     private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
