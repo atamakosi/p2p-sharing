@@ -1,13 +1,7 @@
 package View;
 
-import Model.PeerDiscovery;
 import Model.PeerNode;
-import Model.PeerServer;
 import Model.RMIClientServer;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -22,7 +16,6 @@ public class MainUI extends javax.swing.JFrame {
     
     private RMIClientServer localCS;
 //    private PeerServer server;
-    private PeerDiscovery disco = null;
     private PeerNode node;
     private final int PORT = 33000;
 

@@ -24,8 +24,7 @@ public class Main {
             PeerNode node = new PeerNode(InetAddress.getLocalHost());
             MainUI ui = new MainUI();
             ui.setVisible(true);
-            PeerDiscovery disco = new PeerDiscovery();
-            disco.run();
+
         } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
