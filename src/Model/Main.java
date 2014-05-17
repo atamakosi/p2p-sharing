@@ -7,11 +7,6 @@
 package Model;
 
 import View.MainUI;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Adam
@@ -20,13 +15,7 @@ public class Main {
     
     
     public static void main(String[] args)  {
-        try {
-            PeerNode node = new PeerNode(InetAddress.getLocalHost());
-            MainUI ui = new MainUI();
-            ui.setVisible(true);
-
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        MainUI ui = new MainUI();
+        ui.setVisible(true);
     }
 }
