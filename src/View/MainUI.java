@@ -1,10 +1,10 @@
 package View;
 
+import Model.Observer;
 import Model.PeerNode;
 import Model.RMIClientServer;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import javax.swing.JTextField;
 
 /*
  * To change this template, choose Tools | Templates
@@ -12,14 +12,14 @@ import java.util.logging.Logger;
  */
 
 /**
- * 
+ * Main UI to display peers and files with appropriate tools
  * @author mcnabba
  */
-public class MainUI extends javax.swing.JFrame {
+public class MainUI extends javax.swing.JFrame implements Observer {
     
     private RMIClientServer localCS;
-//    private PeerServer server;
     private PeerNode node;
+    private List<PeerNode> peers;
 
     /**
      * Creates new form MainUI
@@ -33,6 +33,23 @@ public class MainUI extends javax.swing.JFrame {
     public void setNode(PeerNode node)  {
         this.node = node;
     }
+    
+    
+    @Override
+    public void update(List<PeerNode> peers) {
+        this.peers = peers;
+        refreshPeerPanel();
+    }
+    
+    
+    public void refreshPeerPanel()  {
+        for ( PeerNode p : peers )  {
+            JTextField pTxt = new JTextField();
+            pTxt.setText(p.toString());
+            mainPeerPnl.add(pTxt);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,7 +64,7 @@ public class MainUI extends javax.swing.JFrame {
         startBtn = new javax.swing.JButton();
         pauseBtn = new javax.swing.JButton();
         stopBtn = new javax.swing.JButton();
-        filelistPnl = new javax.swing.JPanel();
+        mainPeerPnl = new javax.swing.JPanel();
         lineSep = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
         fileItm = new javax.swing.JMenu();
@@ -55,6 +72,7 @@ public class MainUI extends javax.swing.JFrame {
         exitItm = new javax.swing.JMenuItem();
         editItem = new javax.swing.JMenu();
         settingsItem = new javax.swing.JMenuItem();
+        peerPnl = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,8 +104,8 @@ public class MainUI extends javax.swing.JFrame {
                     .addComponent(stopBtn)))
         );
 
-        javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(filelistPnl);
-        filelistPnl.setLayout(filelistPnlLayout);
+        javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(mainPeerPnl);
+        mainPeerPnl.setLayout(filelistPnlLayout);
         filelistPnlLayout.setHorizontalGroup(
             filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
@@ -104,7 +122,7 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPnlLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mainPeerPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lineSep, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addComponent(toolbarPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -116,7 +134,7 @@ public class MainUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lineSep, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filelistPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(mainPeerPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -222,7 +240,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenu editItem;
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileItm;
-    private javax.swing.JPanel filelistPnl;
+    private javax.swing.JPanel mainPeerPnl;
     private javax.swing.JButton startBtn;
     private javax.swing.JButton pauseBtn;
     private javax.swing.JButton stopBtn;
@@ -231,5 +249,9 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem settingsItem;
     private javax.swing.JPanel toolbarPnl;
+    private javax.swing.JPanel peerPnl;
+
     // End of variables declaration//GEN-END:variables
+
+    
 }

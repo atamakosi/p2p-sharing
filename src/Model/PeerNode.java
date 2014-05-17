@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * to store discovered peers in a data collection.
  * @author mcnabba
  */
-public class PeerNode  {
+public class PeerNode implements PeerListener {
        
     private final int PORT = 33000;
     private static List<PeerNode> peers;
@@ -27,6 +27,7 @@ public class PeerNode  {
     private Thread discThread;
     private PeerComms pComms;
     private PeerDiscovery pDisc;
+    private List<Observer> observers;
     
     public PeerNode()   {
         peers = new ArrayList<>();
@@ -34,22 +35,21 @@ public class PeerNode  {
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
         discThread = new Thread(pDisc);
-        
+        observers = new ArrayList<>();
     }
 
+    /**
+     * constructor to store incoming Peer connections.  
+     * @param s 
+     */
     public PeerNode(Socket s)   {
         this.s = s;
     }
- 
-    public void sendFileName(String fileName, Socket s)  {
-        
-    }
-    
+
     public void stop()  {
         pComms.stopRun();
         pDisc.stopRun();
         try {
-            
             commsThread.join();
             discThread.join();
         } catch (InterruptedException ex) {
@@ -65,7 +65,7 @@ public class PeerNode  {
     public String toString()    {
         String str = null;
         try {
-            str = InetAddress.getLocalHost().getAddress().toString();
+            str = InetAddress.getLocalHost().toString();
         } catch (UnknownHostException ex) {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,5 +76,26 @@ public class PeerNode  {
         System.out.println("Threads starting...");
         commsThread.start();
         discThread.start(); 
+    }
+    
+    @Override
+    public void register(Observer obs) {
+        if (!observers.contains(obs))   {
+            observers.add(obs);
+        }
+    }
+
+    @Override
+    public void unregister(Observer obs) {
+        if (observers.contains(obs))    {
+            observers.remove(obs);
+        }
+    }
+
+    @Override
+    public void notifyListeners() {
+        for (Observer obs : observers ) {
+            obs.update(this.peers);
+        }
     }
 }
