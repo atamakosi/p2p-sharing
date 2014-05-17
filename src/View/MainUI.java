@@ -26,21 +26,16 @@ public class MainUI extends javax.swing.JFrame {
      * Creates new form MainUI
      * @param p
      */
-    public MainUI(PeerNode node) {
-        this.node = node;
+    public MainUI() {
         initComponents();
         this.setSize(800, 800);
-        
-//        localCS = new RMIClientServer();
-//        server = new PeerServer();
-//        node = new PeerNode(server.getSocket());
+//        PeerNode node = new PeerNode();
       
     }
-
-    private MainUI() {
-        initComponents();
+    
+    public void setNode(PeerNode node)  {
+        this.node = node;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
