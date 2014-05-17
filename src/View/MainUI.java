@@ -2,6 +2,9 @@ package View;
 
 import Model.PeerNode;
 import Model.RMIClientServer;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -21,8 +24,10 @@ public class MainUI extends javax.swing.JFrame {
 
     /**
      * Creates new form MainUI
+     * @param p
      */
-    public MainUI() {
+    public MainUI(PeerNode node) {
+        this.node = node;
         initComponents();
         this.setSize(800, 800);
         
@@ -30,6 +35,10 @@ public class MainUI extends javax.swing.JFrame {
 //        server = new PeerServer();
 //        node = new PeerNode(server.getSocket());
       
+    }
+
+    private MainUI() {
+        initComponents();
     }
 
     /**
@@ -167,11 +176,17 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
-//        server.run();
+        try {
+            node.listen();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
     
     private void stopBtnActionPerformed(java.awt.event.ActionEvent evt) {
 //        server.stop();
+        node.stop();
     }
     
     private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed

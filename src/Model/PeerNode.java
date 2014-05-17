@@ -35,6 +35,7 @@ public class PeerNode {
         try (Socket socket = s) 
          {
             PrintWriter out = new PrintWriter( socket.getOutputStream(), true );
+             System.out.println("Sending file " + fileName);
             out.println(fileName);
             out.close();
         } catch (IOException ex) {
@@ -61,6 +62,9 @@ public class PeerNode {
         run = false;
     }
     
+    public List<PeerNode> getPeers()    {
+        return peers;
+    }
     
     @Override
     public String toString()    {
