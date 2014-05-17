@@ -48,11 +48,6 @@ public class PeerNode implements Runnable {
         }
     }
     
-    public void listen() throws IOException    {
-        
-    }
-    
-    
     public void stop()  {
         run = false;
     }
@@ -70,6 +65,11 @@ public class PeerNode implements Runnable {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
         return str;
+    }
+    
+    public void start() {
+        run = true;
+        run();
     }
 
     @Override

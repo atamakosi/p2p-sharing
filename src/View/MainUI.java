@@ -20,7 +20,6 @@ public class MainUI extends javax.swing.JFrame {
     private RMIClientServer localCS;
 //    private PeerServer server;
     private PeerNode node;
-    private final int PORT = 33000;
 
     /**
      * Creates new form MainUI
@@ -171,11 +170,7 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectItmActionPerformed
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            node.listen();
-        } catch (IOException ex) {
-            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        node.start();
        
     }
     
