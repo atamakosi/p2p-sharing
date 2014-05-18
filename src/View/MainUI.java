@@ -1,52 +1,56 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package View;
 
 import Model.Observer;
 import Model.PeerNode;
-import Model.RMIClientServer;
+import java.awt.BorderLayout;
 import java.net.InetAddress;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JTextField;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Main UI to display peers and files with appropriate tools
- * @author mcnabba
+ *
+ * @author Adam
  */
 public class MainUI extends javax.swing.JFrame implements Observer {
-    
-    private RMIClientServer localCS;
-    private PeerNode node;
-    private Map<InetAddress, PeerNode> peers;
 
+    private PeerNode node;
+    
     /**
      * Creates new form MainUI
-     * @param p
      */
     public MainUI() {
         initComponents();
-        this.setSize(800, 800);     
+//        this.setSize(800, 800);
+        mainPnl.setLayout(new BorderLayout());
+        mainPnl.add(toolBar, BorderLayout.NORTH);
+        
+//        contentPnl.setLayout(new BorderLayout());
+//        contentPnl.add(peerPne, BorderLayout.WEST);
+//        contentPnl.add(filePne, BorderLayout.CENTER);
     }
-    
+
     public void setNode(PeerNode node)  {
         this.node = node;
+        node.register(this);
     }
-    
     
     @Override
     public void update(Map<InetAddress, PeerNode> peers) {
-        this.peers = peers;
-        refreshPeerPanel();
+        Iterator it = peers.values().iterator();
+        while (it.hasNext())   {
+            JTextField pTxt = new JTextField(it.next().toString());
+            peerPne.add(pTxt);
+        }
+        repaint();
     }
     
-    
-    public void refreshPeerPanel()  {
-        
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,95 +62,59 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private void initComponents() {
 
         mainPnl = new javax.swing.JPanel();
-        toolbarPnl = new javax.swing.JPanel();
-        startBtn = new javax.swing.JButton();
-        pauseBtn = new javax.swing.JButton();
-        stopBtn = new javax.swing.JButton();
-        mainPeerPnl = new javax.swing.JPanel();
-        lineSep = new javax.swing.JSeparator();
+        toolBar = new javax.swing.JToolBar();
+        separator = new javax.swing.JSeparator();
+        contentPnl = new javax.swing.JPanel();
+        peerPne = new javax.swing.JScrollPane();
+        filePne = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
-        fileItm = new javax.swing.JMenu();
-        connectItm = new javax.swing.JMenuItem();
+        fileMnu = new javax.swing.JMenu();
         exitItm = new javax.swing.JMenuItem();
-        editItem = new javax.swing.JMenu();
-        settingsItem = new javax.swing.JMenuItem();
-        peerPnl = new javax.swing.JPanel();
+        editMnu = new javax.swing.JMenu();
+        settingsItm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        startBtn.setText("Start");
+        toolBar.setRollover(true);
 
-        pauseBtn.setText("Pause");
+        filePne.setName("Files"); // NOI18N
 
-        stopBtn.setText("Stop");
-
-        javax.swing.GroupLayout toolbarPnlLayout = new javax.swing.GroupLayout(toolbarPnl);
-        toolbarPnl.setLayout(toolbarPnlLayout);
-        toolbarPnlLayout.setHorizontalGroup(
-            toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(toolbarPnlLayout.createSequentialGroup()
-                .addComponent(startBtn)
+        javax.swing.GroupLayout contentPnlLayout = new javax.swing.GroupLayout(contentPnl);
+        contentPnl.setLayout(contentPnlLayout);
+        contentPnlLayout.setHorizontalGroup(
+            contentPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contentPnlLayout.createSequentialGroup()
+                .addComponent(peerPne, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pauseBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stopBtn)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(filePne, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
         );
-        toolbarPnlLayout.setVerticalGroup(
-            toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, toolbarPnlLayout.createSequentialGroup()
-                .addGap(0, 11, Short.MAX_VALUE)
-                .addGroup(toolbarPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startBtn)
-                    .addComponent(pauseBtn)
-                    .addComponent(stopBtn)))
-        );
-
-        javax.swing.GroupLayout filelistPnlLayout = new javax.swing.GroupLayout(mainPeerPnl);
-        mainPeerPnl.setLayout(filelistPnlLayout);
-        filelistPnlLayout.setHorizontalGroup(
-            filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        filelistPnlLayout.setVerticalGroup(
-            filelistPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
+        contentPnlLayout.setVerticalGroup(
+            contentPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(peerPne, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+            .addComponent(filePne)
         );
 
         javax.swing.GroupLayout mainPnlLayout = new javax.swing.GroupLayout(mainPnl);
         mainPnl.setLayout(mainPnlLayout);
         mainPnlLayout.setHorizontalGroup(
             mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPnlLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(mainPeerPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lineSep, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(toolbarPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(separator)
+            .addComponent(contentPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         mainPnlLayout.setVerticalGroup(
             mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPnlLayout.createSequentialGroup()
-                .addComponent(toolbarPnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lineSep, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPeerPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(contentPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(mainPnl, java.awt.BorderLayout.CENTER);
 
-        fileItm.setText("File");
-
-        connectItm.setText("Connect...");
-        connectItm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectItmActionPerformed(evt);
-            }
-        });
-        fileItm.add(connectItm);
+        fileMnu.setText("File");
 
         exitItm.setText("Exit");
         exitItm.addActionListener(new java.awt.event.ActionListener() {
@@ -154,21 +122,16 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 exitItmActionPerformed(evt);
             }
         });
-        fileItm.add(exitItm);
+        fileMnu.add(exitItm);
 
-        menuBar.add(fileItm);
+        menuBar.add(fileMnu);
 
-        editItem.setText("Edit");
+        editMnu.setText("Edit");
 
-        settingsItem.setText("Settings");
-        settingsItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settingsItemActionPerformed(evt);
-            }
-        });
-        editItem.add(settingsItem);
+        settingsItm.setText("Settings");
+        editMnu.add(settingsItm);
 
-        menuBar.add(editItem);
+        menuBar.add(editMnu);
 
         setJMenuBar(menuBar);
 
@@ -178,25 +141,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private void exitItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItmActionPerformed
         dispose();
     }//GEN-LAST:event_exitItmActionPerformed
-
-    private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
-        
-    }//GEN-LAST:event_connectItmActionPerformed
-
-    private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Starting node...");
-        node.start();
-    }
-    
-    private void stopBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Stopping node...");
-        node.stop();
-    }
-    
-    private void settingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsItemActionPerformed
-        SettingsUI settings = new SettingsUI(this, false);
-        settings.setVisible(true);
-    }//GEN-LAST:event_settingsItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,28 +171,24 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
             public void run() {
                 new MainUI().setVisible(true);
             }
         });
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem connectItm;
-    private javax.swing.JMenu editItem;
+    private javax.swing.JPanel contentPnl;
+    private javax.swing.JMenu editMnu;
     private javax.swing.JMenuItem exitItm;
-    private javax.swing.JMenu fileItm;
-    private javax.swing.JPanel mainPeerPnl;
-    private javax.swing.JButton startBtn;
-    private javax.swing.JButton pauseBtn;
-    private javax.swing.JButton stopBtn;
-    private javax.swing.JSeparator lineSep;
+    private javax.swing.JMenu fileMnu;
+    private javax.swing.JScrollPane filePne;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem settingsItem;
-    private javax.swing.JPanel toolbarPnl;
-    private javax.swing.JPanel peerPnl;
-
+    private javax.swing.JScrollPane peerPne;
+    private javax.swing.JSeparator separator;
+    private javax.swing.JMenuItem settingsItm;
+    private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
     

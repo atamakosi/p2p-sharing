@@ -31,7 +31,7 @@ public class PeerNode implements PeerListener {
     
     public PeerNode()   {
         peers = new HashMap<>();
-        pDisc = new PeerDiscovery(peers);
+        pDisc = new PeerDiscovery(this);
         
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
@@ -59,6 +59,13 @@ public class PeerNode implements PeerListener {
     
     public Map<InetAddress, PeerNode> getPeers()    {
         return peers;
+    }
+    
+    public void addPeerNode(PeerNode n) {
+        if (!peers.containsKey(n.address))  {
+            peers.put(n.address, n);
+            notifyListeners();
+        }
     }
     
     @Override
