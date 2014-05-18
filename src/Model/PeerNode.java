@@ -6,6 +6,7 @@ package Model;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,8 @@ public class PeerNode implements PeerListener {
     private final int PORT = 33000;
     private static List<PeerNode> peers;
     private boolean run = true;
-    private Socket s;
+    private SocketAddress s;
     private Thread commsThread;
-    private Thread discThread;
     private PeerComms pComms;
     private PeerDiscovery pDisc;
     private List<Observer> observers;
@@ -32,9 +32,9 @@ public class PeerNode implements PeerListener {
     public PeerNode()   {
         peers = new ArrayList<>();
         pDisc = new PeerDiscovery(peers);
+        
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
-        discThread = new Thread(pDisc);
         observers = new ArrayList<>();
     }
 
@@ -42,7 +42,7 @@ public class PeerNode implements PeerListener {
      * constructor to store incoming Peer connections.  
      * @param s 
      */
-    public PeerNode(Socket s)   {
+    public PeerNode(SocketAddress s)   {
         this.s = s;
     }
 
@@ -51,7 +51,7 @@ public class PeerNode implements PeerListener {
         pDisc.stopRun();
         try {
             commsThread.join();
-            discThread.join();
+            pDisc.join();
         } catch (InterruptedException ex) {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +75,7 @@ public class PeerNode implements PeerListener {
     public void start() {
         System.out.println("Threads starting...");
         commsThread.start();
-        discThread.start(); 
+        pDisc.start();
     }
     
     @Override

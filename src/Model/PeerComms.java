@@ -7,11 +7,9 @@
 package Model;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -27,9 +25,16 @@ public class PeerComms implements Runnable {
     private final int DEST_PORT = 33000;
     private final int SLEEP = 10000;
     private boolean run = true;
+    private InetAddress group;
+    private DatagramSocket dSocket;
     
     public PeerComms()  {
-    
+        try {
+            group = InetAddress.getByName(GROUP);
+            dSocket = new DatagramSocket();
+        } catch (UnknownHostException | SocketException ex) {
+            Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
@@ -38,17 +43,16 @@ public class PeerComms implements Runnable {
             while (run) {
                 //broadcast empty data packet every 10 seconds
                 //sleep 10 seconds
-                DatagramSocket dSocket = new DatagramSocket();
                 byte[] buffer = new byte[256];
-                buffer = InetAddress.getLocalHost().toString().getBytes();
-                InetAddress group = InetAddress.getByName(GROUP);
+                
                 DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
                 System.out.println("Sending address to peers...");
+                
                 dSocket.send(dPacket);
-                dSocket.close();
+                
                 try {
-                    Thread.sleep(SLEEP);
                     System.out.println("Sleeping 10s...");
+                    Thread.sleep(SLEEP);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -60,6 +64,7 @@ public class PeerComms implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
             }
+        dSocket.close();
     }
     
     public void sendFile(String fileName)  {

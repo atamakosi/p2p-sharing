@@ -17,10 +17,11 @@ public class Main {
         
     public static void main(String[] args)  {
         PeerNode p = new PeerNode();
-        System.out.println(p.toString());
-        p.start();
+        System.out.println("local Node ID: " + p.toString());
+        
         MainUI ui = new MainUI();
         ui.setVisible(true);
         ui.setNode(p);
+        p.start();
     }
 }
