@@ -5,11 +5,11 @@
 package Model;
 
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,16 +21,16 @@ import java.util.logging.Logger;
 public class PeerNode implements PeerListener {
        
     private final int PORT = 33000;
-    private static List<PeerNode> peers;
+    private static Map<InetAddress, PeerNode> peers;
     private boolean run = true;
-    private SocketAddress s;
+    private InetAddress address;
     private Thread commsThread;
     private PeerComms pComms;
     private PeerDiscovery pDisc;
     private List<Observer> observers;
     
     public PeerNode()   {
-        peers = new ArrayList<>();
+        peers = new HashMap<>();
         pDisc = new PeerDiscovery(peers);
         
         pComms = new PeerComms();
@@ -42,8 +42,8 @@ public class PeerNode implements PeerListener {
      * constructor to store incoming Peer connections.  
      * @param s 
      */
-    public PeerNode(SocketAddress s)   {
-        this.s = s;
+    public PeerNode(InetAddress address)   {
+        this.address = address;
     }
 
     public void stop()  {
@@ -57,7 +57,7 @@ public class PeerNode implements PeerListener {
         }
     }
     
-    public List<PeerNode> getPeers()    {
+    public Map<InetAddress, PeerNode> getPeers()    {
         return peers;
     }
     
@@ -95,7 +95,7 @@ public class PeerNode implements PeerListener {
     @Override
     public void notifyListeners() {
         for (Observer obs : observers ) {
-            obs.update(this.peers);
+            obs.update(peers);
         }
     }
 }

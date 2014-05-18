@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,18 +20,16 @@ import java.util.logging.Logger;
  */
 public class PeerDiscovery extends Thread {
 
-    private List<PeerNode> peers;
+    private static Map<InetAddress, PeerNode> peers;
     private boolean run = true;
     private final int PORT = 33000;
     private final String GROUP = "224.0.0.2";
     private MulticastSocket serverSocket;
     private InetAddress group;
-    private int count;
     private PeerNode p;
     
-    public PeerDiscovery(List<PeerNode> peers)  {
+    public PeerDiscovery(Map<InetAddress, PeerNode> peers)  {
         this.peers = peers;
-        count = 0;
         try {
             serverSocket = new MulticastSocket(PORT);
             System.out.println("Listening on port " + serverSocket.getLocalPort());
@@ -51,11 +49,12 @@ public class PeerDiscovery extends Thread {
             while (run) {
                 serverSocket.receive(packet);
                 System.out.println("Receiving...");
-                System.out.println("received " + packet.getSocketAddress());
-                p = new PeerNode(packet.getSocketAddress());
-                if (!peers.contains(p)) {
+                System.out.println("received " + packet.getAddress());
+                p = new PeerNode(packet.getAddress());
+                if (!peers.containsKey(packet.getAddress())) {
                     synchronized (peers)    {
-                        peers.add(p);
+                        peers.put(packet.getAddress(), p);
+                        System.out.println("peer added");
                     }
                 }
                 

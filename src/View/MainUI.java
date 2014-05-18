@@ -3,7 +3,9 @@ package View;
 import Model.Observer;
 import Model.PeerNode;
 import Model.RMIClientServer;
+import java.net.InetAddress;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JTextField;
 
 /*
@@ -19,7 +21,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     
     private RMIClientServer localCS;
     private PeerNode node;
-    private List<PeerNode> peers;
+    private Map<InetAddress, PeerNode> peers;
 
     /**
      * Creates new form MainUI
@@ -36,18 +38,14 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     
     
     @Override
-    public void update(List<PeerNode> peers) {
+    public void update(Map<InetAddress, PeerNode> peers) {
         this.peers = peers;
         refreshPeerPanel();
     }
     
     
     public void refreshPeerPanel()  {
-        for ( PeerNode p : peers )  {
-            JTextField pTxt = new JTextField();
-            pTxt.setText(p.toString());
-            mainPeerPnl.add(pTxt);
-        }
+        
     }
     
     /**
