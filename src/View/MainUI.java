@@ -63,6 +63,9 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
         mainPnl = new javax.swing.JPanel();
         toolBar = new javax.swing.JToolBar();
+        startBtn = new javax.swing.JButton();
+        pauseBtn = new javax.swing.JButton();
+        stopBtn = new javax.swing.JButton();
         separator = new javax.swing.JSeparator();
         contentPnl = new javax.swing.JPanel();
         peerPne = new javax.swing.JScrollPane();
@@ -77,6 +80,24 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
         toolBar.setRollover(true);
 
+        startBtn.setText("Start");
+        startBtn.setFocusable(false);
+        startBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        startBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(startBtn);
+
+        pauseBtn.setText("Pause");
+        pauseBtn.setFocusable(false);
+        pauseBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        pauseBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(pauseBtn);
+
+        stopBtn.setText("Stop");
+        stopBtn.setFocusable(false);
+        stopBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        stopBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(stopBtn);
+
         filePne.setName("Files"); // NOI18N
 
         javax.swing.GroupLayout contentPnlLayout = new javax.swing.GroupLayout(contentPnl);
@@ -86,7 +107,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             .addGroup(contentPnlLayout.createSequentialGroup()
                 .addComponent(peerPne, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filePne, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
+                .addComponent(filePne))
         );
         contentPnlLayout.setVerticalGroup(
             contentPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,7 +119,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         mainPnl.setLayout(mainPnlLayout);
         mainPnlLayout.setHorizontalGroup(
             mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
             .addComponent(separator)
             .addComponent(contentPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -185,9 +206,12 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private javax.swing.JScrollPane filePne;
     private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JButton pauseBtn;
     private javax.swing.JScrollPane peerPne;
     private javax.swing.JSeparator separator;
     private javax.swing.JMenuItem settingsItm;
+    private javax.swing.JButton startBtn;
+    private javax.swing.JButton stopBtn;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 

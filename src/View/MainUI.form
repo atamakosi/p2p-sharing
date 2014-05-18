@@ -67,7 +67,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="toolBar" alignment="0" max="32767" attributes="0"/>
+              <Component id="toolBar" alignment="0" pref="385" max="32767" attributes="0"/>
               <Component id="separator" alignment="0" max="32767" attributes="0"/>
               <Component id="contentPnl" alignment="0" max="32767" attributes="0"/>
           </Group>
@@ -91,6 +91,32 @@
           </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JButton" name="startBtn">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Start"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="pauseBtn">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Pause"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="stopBtn">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stop"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+            </Component>
+          </SubComponents>
         </Container>
         <Component class="javax.swing.JSeparator" name="separator">
         </Component>
@@ -102,7 +128,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="peerPne" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="filePne" pref="279" max="32767" attributes="0"/>
+                      <Component id="filePne" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
