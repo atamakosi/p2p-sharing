@@ -42,12 +42,11 @@ public class PeerComms implements Runnable {
         try {
             while (run) {
                 //broadcast empty data packet every 10 seconds
-                //sleep 10 seconds
                 byte[] buffer = new byte[256];
                 
                 DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
                 System.out.println("Sending address to peers...");
-                
+                //sending an empty packet still allows remote peer to get the local IP address
                 dSocket.send(dPacket);
                 
                 try {
