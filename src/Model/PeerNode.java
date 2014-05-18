@@ -40,7 +40,7 @@ public class PeerNode implements PeerListener {
 
     /**
      * constructor to store incoming Peer connections.  
-     * @param s 
+     * @param address
      */
     public PeerNode(InetAddress address)   {
         this.address = address;
