@@ -64,6 +64,7 @@ public class PeerNode implements PeerListener {
     public void addPeerNode(PeerNode n) {
         if (!peers.containsKey(n.address))  {
             peers.put(n.address, n);
+            System.out.println("Peer added to Map");
             notifyListeners();
         }
     }

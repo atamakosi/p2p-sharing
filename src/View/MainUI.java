@@ -12,7 +12,9 @@ import java.awt.BorderLayout;
 import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -21,19 +23,26 @@ import javax.swing.JTextField;
 public class MainUI extends javax.swing.JFrame implements Observer {
 
     private PeerNode node;
+    private JPanel peerPnl;
+    private JPanel contentPnl;
+    private JPanel filePnl;
+    private JTextArea fileTxtArea;
     
     /**
      * Creates new form MainUI
      */
     public MainUI() {
         initComponents();
-//        this.setSize(800, 800);
-        mainPnl.setLayout(new BorderLayout());
-        mainPnl.add(toolBar, BorderLayout.NORTH);
-        
-//        contentPnl.setLayout(new BorderLayout());
-//        contentPnl.add(peerPne, BorderLayout.WEST);
-//        contentPnl.add(filePne, BorderLayout.CENTER);
+        setSize(800,800);
+        contentPnl = new JPanel();
+        contentPnl.setLayout(new BorderLayout());
+        filePnl = new JPanel();
+        fileTxtArea = new JTextArea(); 
+        filePnl.add(fileTxtArea);
+        peerPnl = new JPanel();
+        contentPnl.add(peerPnl, BorderLayout.WEST);
+        contentPnl.add(filePnl, BorderLayout.CENTER);
+        this.add(contentPnl);
     }
 
     public void setNode(PeerNode node)  {
@@ -43,12 +52,18 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     
     @Override
     public void update(Map<InetAddress, PeerNode> peers) {
+        peerPnl.removeAll();
+        System.out.println("peers length " + peers.size());
         Iterator it = peers.values().iterator();
+    
         while (it.hasNext())   {
-            JTextField pTxt = new JTextField(it.next().toString());
-            peerPne.add(pTxt);
+            String str = it.next().toString();
+            System.out.println(str);
+            JLabel pTxt = new JLabel(str);
+            peerPnl.add(pTxt);
         }
-        repaint();
+        peerPnl.repaint();
+        this.revalidate();
     }
     
     
@@ -61,15 +76,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mainPnl = new javax.swing.JPanel();
-        toolBar = new javax.swing.JToolBar();
-        startBtn = new javax.swing.JButton();
-        pauseBtn = new javax.swing.JButton();
-        stopBtn = new javax.swing.JButton();
-        separator = new javax.swing.JSeparator();
-        contentPnl = new javax.swing.JPanel();
-        peerPne = new javax.swing.JScrollPane();
-        filePne = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
         fileMnu = new javax.swing.JMenu();
         exitItm = new javax.swing.JMenuItem();
@@ -77,63 +83,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         settingsItm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        toolBar.setRollover(true);
-
-        startBtn.setText("Start");
-        startBtn.setFocusable(false);
-        startBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        startBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(startBtn);
-
-        pauseBtn.setText("Pause");
-        pauseBtn.setFocusable(false);
-        pauseBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        pauseBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(pauseBtn);
-
-        stopBtn.setText("Stop");
-        stopBtn.setFocusable(false);
-        stopBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        stopBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(stopBtn);
-
-        filePne.setName("Files"); // NOI18N
-
-        javax.swing.GroupLayout contentPnlLayout = new javax.swing.GroupLayout(contentPnl);
-        contentPnl.setLayout(contentPnlLayout);
-        contentPnlLayout.setHorizontalGroup(
-            contentPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contentPnlLayout.createSequentialGroup()
-                .addComponent(peerPne, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filePne))
-        );
-        contentPnlLayout.setVerticalGroup(
-            contentPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(peerPne, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-            .addComponent(filePne)
-        );
-
-        javax.swing.GroupLayout mainPnlLayout = new javax.swing.GroupLayout(mainPnl);
-        mainPnl.setLayout(mainPnlLayout);
-        mainPnlLayout.setHorizontalGroup(
-            mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-            .addComponent(separator)
-            .addComponent(contentPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        mainPnlLayout.setVerticalGroup(
-            mainPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPnlLayout.createSequentialGroup()
-                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contentPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(mainPnl, java.awt.BorderLayout.CENTER);
 
         fileMnu.setText("File");
 
@@ -199,20 +148,11 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel contentPnl;
     private javax.swing.JMenu editMnu;
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileMnu;
-    private javax.swing.JScrollPane filePne;
-    private javax.swing.JPanel mainPnl;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JButton pauseBtn;
-    private javax.swing.JScrollPane peerPne;
-    private javax.swing.JSeparator separator;
     private javax.swing.JMenuItem settingsItm;
-    private javax.swing.JButton startBtn;
-    private javax.swing.JButton stopBtn;
-    private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
     
