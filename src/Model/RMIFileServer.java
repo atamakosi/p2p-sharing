@@ -17,7 +17,7 @@ public class RMIFileServer implements RMIFileInterface {
 		RMIFileInterface stub = (RMIFileInterface) 
 			UnicastRemoteObject.exportObject(this, 0);
 		Registry reg = LocateRegistry.getRegistry();
-		reg.rebind("FServer", stub);
+		reg.rebind("F Server", stub);
 		System.out.println("Names bound in the registry");
 	}
 
