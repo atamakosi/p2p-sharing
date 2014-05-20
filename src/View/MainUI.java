@@ -10,6 +10,7 @@ import Model.Observer;
 import Model.PeerNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagLayout;
 import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         filePnl.add(fileList);
         peerPnl = new JPanel();
         peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        peerPnl.setLayout(new GridBagLayout());
         contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);

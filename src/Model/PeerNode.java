@@ -28,6 +28,7 @@ public class PeerNode implements PeerListener {
     private PeerComms pComms;
     private PeerDiscovery pDisc;
     private List<Observer> observers;
+    private InetAddress leader = null;
     
     public PeerNode()   {
         peers = new HashMap<>();
@@ -78,10 +79,23 @@ public class PeerNode implements PeerListener {
         return address.getHostAddress();
     }
     
+    /**
+     * starts listening for peers, broadcasting to peers, and starts a leader
+     * election.  Upon a local PeerNode starting, it should discover the leader
+     * in the P2P network, which it might usurp.
+     */
     public void start() {
-        System.out.println("Threads starting...");
         commsThread.start();
         pDisc.start();
+        if ( leader == null )   {
+            Leader leaderSelection = new Leader(this);
+            Thread leaderThread = new Thread(leaderSelection);
+            leaderThread.start();
+        }
+    }
+    
+    public void setLeader(InetAddress leader)   {
+        this.leader = leader;
     }
     
     @Override

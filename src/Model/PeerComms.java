@@ -50,7 +50,7 @@ public class PeerComms implements Runnable {
                 dSocket.send(dPacket);
                 
                 try {
-                    System.out.println("Sleeping 10s...");
+                    System.out.println("Sleeping " + SLEEP);
                     Thread.sleep(SLEEP);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);

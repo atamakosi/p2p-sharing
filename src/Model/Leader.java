@@ -24,22 +24,26 @@ import java.util.logging.Logger;
  */
 public class Leader implements Runnable {
     
-    private final int SLEEP = 1000;
+    //class D network group to join
     private final String GROUP = "224.0.0.2";
+    //variable to hold the network group
     private InetAddress group;
+    //port to rx/tx data packets regarding election on 
     private final int DEST_PORT = 33001;
     //when election started flag set to true
     private boolean participant = false;
     //unique numerical identifier, used to determine leader.  greatest UID = leader
     private long ownID;
     private MulticastSocket serverSocket;
+    //reference to the peer who is leader.  can be set to localhost.
     private InetAddress leader;
+    //reference to local client to pass leader data when a new leader is found.
     private PeerNode node;
+    
     private boolean run = true;
     
     public Leader(PeerNode node) {
         this.ownID = Runtime.getRuntime().freeMemory();
-        System.out.println("Free Memory = " + ownID);
         this.node = node;
         try {
             serverSocket = new MulticastSocket(DEST_PORT);
@@ -50,6 +54,21 @@ public class Leader implements Runnable {
         }
     }
     
+    /**
+     * Listens for messages from group requesting an election.  The packets being
+     * received will contain the amount of free memory in the sender.  The local 
+     * client will compare against its own memory at startup and determine if it
+     * should rebroadcast using <code> startElection</code>
+     * claiming it has more free memory or accept the new leader
+     * because they have more available resources.  
+     * 
+     * This may result in a flood of broadcasts temporarily as the leader is 
+     * sorted in theory.  E.g. if this is the lowest id peer, then all other 
+     * peers might respond and end up with a Big O(n2) transmissions.  
+     * 
+     * Each peer with greater id will respond, until only one peer responds and 
+     * other peers set it as the leader.
+     */
     public void receiveMessage()   {
        try {
             byte[] buffer = new byte[1024];
@@ -57,11 +76,9 @@ public class Leader implements Runnable {
             serverSocket.receive(packet);
             buffer = packet.getData();
             long id = Longs.fromByteArray(buffer);
-            System.out.println("received long = " + id);
-            if (id <= ownID ) {
+            if (id < ownID ) {
                 startElection();
             }   else    {
-                System.out.println("Leader is " + packet.getAddress());
                 node.setLeader(packet.getAddress());
             }   
             
@@ -70,8 +87,11 @@ public class Leader implements Runnable {
         }
     }
     
+    /**
+     * Called when this thread receives an id less than its own local id value. 
+     * transmits its id to other peers in group.
+     */
     public void startElection() {
-        System.out.println("Starting election algorithm.");
         participant = true;
         byte[] msg = Longs.toByteArray(ownID);
         sendPacket(msg);
@@ -83,10 +103,8 @@ public class Leader implements Runnable {
      */
     private void sendPacket(byte[] buffer)   {
         try {
-
             group = InetAddress.getByName(GROUP);
             DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
-            System.out.println("Sending Leader packet");
             DatagramSocket dSocket = new DatagramSocket();
             dSocket.send(dPacket);
         } catch (UnknownHostException ex) {
@@ -108,4 +126,15 @@ public class Leader implements Runnable {
         }
     }
     
+    /**
+     * stops thread actions
+     */
+    public void stop()  {
+        try {
+            serverSocket.leaveGroup(group);
+            run = false;
+        } catch (IOException ex) {
+            Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
