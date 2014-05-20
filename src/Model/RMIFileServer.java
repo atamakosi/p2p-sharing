@@ -19,7 +19,7 @@ public class RMIFileServer implements RMIFileInterface {
 		System.out.println("Names bound in the registry");
 	}
 
-        @Override
+	@Override
 	public String[] getFileList() {
 		File dir = new File(this.fileDirectory);
 		String[] fList = dir.list();

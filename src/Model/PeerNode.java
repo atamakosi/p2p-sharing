@@ -28,7 +28,8 @@ public class PeerNode implements PeerListener {
     private PeerComms pComms;
     private PeerDiscovery pDisc;
     private List<Observer> observers;
-    
+	private RMIFileServer fileServer;
+
     public PeerNode()   {
         peers = new HashMap<>();
         pDisc = new PeerDiscovery(this);
@@ -40,6 +41,7 @@ public class PeerNode implements PeerListener {
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
         observers = new ArrayList<>();
+		fileServer = new RMIFileServer(System.getProperty("user.home");
     }
 
     /**
@@ -72,6 +74,10 @@ public class PeerNode implements PeerListener {
             notifyListeners();
         }
     }
+
+	public String[] getFileList() {
+		return null;
+	}
     
     @Override
     public String toString()    {

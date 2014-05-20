@@ -49,9 +49,13 @@ public class PeerDiscovery extends Thread {
                 serverSocket.receive(packet);
                 System.out.println("Receiving...");
                 System.out.println("received " + packet.getAddress());
-                p = new PeerNode(packet.getAddress());
-                localPeerNode.addPeerNode(p);
-                
+				if (packet.getAddress() == serverScoket.getLocalport()) {
+					System.out.println("Received own broadcast not processing it.");
+				} else {
+					System.out.println("Received foreign broadcast, sending it through");
+                	p = new PeerNode(packet.getAddress());
+                	localPeerNode.addPeerNode(p);
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
