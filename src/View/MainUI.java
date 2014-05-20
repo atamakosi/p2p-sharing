@@ -10,6 +10,7 @@ import Model.Observer;
 import Model.PeerNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.net.InetAddress;
 import java.util.Iterator;
@@ -42,6 +43,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JButton putBtn;
     private JTextField searchFld;
     private JButton searchBtn;
+    private GridBagConstraints gridBagConstraint;
     
     /**
      * Creates new form MainUI
@@ -67,13 +69,16 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         toolBar.setFloatable(false);
         filePnl = new JPanel();
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
-//        fileTxtArea = new JTextArea(); 
         //TO DO : add file names from peers to JList for selection
         fileList = new JList();
         filePnl.add(fileList);
         peerPnl = new JPanel();
         peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         peerPnl.setLayout(new GridBagLayout());
+        //adds new peers to top of panel and stacks them vertically
+        gridBagConstraint = new GridBagConstraints();
+        gridBagConstraint.anchor = GridBagConstraints.NORTH;
+        gridBagConstraint.weighty = 1;
         contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);
@@ -93,7 +98,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             String str = it.next().toString();
             System.out.println(str);
             JLabel pTxt = new JLabel(str);
-            peerPnl.add(pTxt);
+            peerPnl.add(pTxt, gridBagConstraint);
         }
         peerPnl.repaint();
         this.revalidate();
