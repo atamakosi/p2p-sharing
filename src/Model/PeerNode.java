@@ -6,9 +6,12 @@ package Model;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -29,7 +32,7 @@ public class PeerNode implements PeerListener {
     private PeerComms pComms;
     private PeerDiscovery pDisc;
     private List<Observer> observers;
-	private RMIFileServer fileServer;
+    private RMIFileServer fileServer;
 
     public PeerNode()   {
         peers = new HashMap<>();
@@ -82,9 +85,24 @@ public class PeerNode implements PeerListener {
         }
     }
 
-	public String[] getFileList() {
-		return null;
-	}
+    public ArrayList getFileList() {
+        Iterator it = peers.values().iterator();
+        ArrayList<String> al = new ArrayList<>();
+        while (it.hasNext()) {
+            try {
+                RMIFileClient fc = new RMIFileClient(it.toString());
+                String[] list = fc.searchForList();
+                al.addAll(Arrays.asList(list));
+            } catch (RemoteException e) {
+                System.out.println("Had RemoteException generating client " + it.toString());
+                e.printStackTrace();;
+            } catch (NotBoundException e) {
+                System.out.println("Had NotBoundException generating client " + it.toString());
+                e.printStackTrace();
+            }
+        }
+        return al;
+    }
     
     @Override
     public String toString()    {
