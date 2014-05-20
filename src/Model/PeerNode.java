@@ -88,16 +88,20 @@ public class PeerNode implements PeerListener {
     public ArrayList getFileList() {
         Iterator it = peers.values().iterator();
         ArrayList<String> al = new ArrayList<>();
+        String fcip = "";
         while (it.hasNext()) {
+            //System.out.println("New file client: " + it.next().toString());
+            
             try {
-                RMIFileClient fc = new RMIFileClient(it.toString());
+                fcip = it.next().toString();
+                RMIFileClient fc = new RMIFileClient(fcip);
                 String[] list = fc.searchForList();
                 al.addAll(Arrays.asList(list));
             } catch (RemoteException e) {
-                System.out.println("Had RemoteException generating client " + it.toString());
+                System.out.println("Had RemoteException generating client " + fcip);
                 e.printStackTrace();;
             } catch (NotBoundException e) {
-                System.out.println("Had NotBoundException generating client " + it.toString());
+                System.out.println("Had NotBoundException generating client " + fcip);
                 e.printStackTrace();
             }
         }
