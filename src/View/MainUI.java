@@ -9,12 +9,18 @@ package View;
 import Model.Observer;
 import Model.PeerNode;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JToolBar;
+import javax.swing.border.Border;
 
 /**
  *
@@ -27,6 +33,10 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JPanel contentPnl;
     private JPanel filePnl;
     private JTextArea fileTxtArea;
+    private JList fileList;
+    private JToolBar toolBar;
+    private JButton getBtn;
+    private JButton disconnectBtn;
     
     /**
      * Creates new form MainUI
@@ -36,10 +46,20 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         setSize(800,800);
         contentPnl = new JPanel();
         contentPnl.setLayout(new BorderLayout());
+        toolBar = new JToolBar();
+        getBtn = new JButton("GET");
+        disconnectBtn = new JButton("Disconnect");
+        toolBar.add(getBtn);
+        toolBar.add(disconnectBtn);
         filePnl = new JPanel();
-        fileTxtArea = new JTextArea(); 
-        filePnl.add(fileTxtArea);
+        filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
+//        fileTxtArea = new JTextArea(); 
+        //TO DO : add file names from peers to JList for selection
+        fileList = new JList();
+        filePnl.add(fileList);
         peerPnl = new JPanel();
+        peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);
         this.add(contentPnl);
@@ -53,9 +73,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     @Override
     public void update(Map<InetAddress, PeerNode> peers) {
         peerPnl.removeAll();
-        System.out.println("peers length " + peers.size());
         Iterator it = peers.values().iterator();
-    
         while (it.hasNext())   {
             String str = it.next().toString();
             System.out.println(str);
@@ -109,6 +127,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItmActionPerformed
+        node.stop();
         dispose();
     }//GEN-LAST:event_exitItmActionPerformed
 

@@ -32,7 +32,11 @@ public class PeerNode implements PeerListener {
     public PeerNode()   {
         peers = new HashMap<>();
         pDisc = new PeerDiscovery(this);
-        
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+        }
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
         observers = new ArrayList<>();
@@ -71,13 +75,7 @@ public class PeerNode implements PeerListener {
     
     @Override
     public String toString()    {
-        String str = null;
-        try {
-            str = InetAddress.getLocalHost().toString();
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return str;
+        return address.getHostAddress();
     }
     
     public void start() {
