@@ -1,10 +1,11 @@
 package Model;
 
+import java.io.File;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.io.File;
+import java.util.ArrayList;
 
 public class RMIFileServer implements RMIFileInterface {
 
@@ -13,13 +14,13 @@ public class RMIFileServer implements RMIFileInterface {
 	public RMIFileServer(String fileDir) throws RemoteException {
 		this.fileDirectory = fileDir;
 		RMIFileInterface stub = (RMIFileInterface) 
-			UnicastRemoteObject.exportObject(this, 0);
-		Registry reg = LocateRegistry.getRegistry();
-		reg.rebind("F Server", stub);
+			UnicastRemoteObject.exportObject(this,1099);
+                Registry reg = LocateRegistry.createRegistry(1099);
+		reg.rebind("FServer", stub);
 		System.out.println("Names bound in the registry");
 	}
 
-        @Override
+	@Override
 	public String[] getFileList() {
 		File dir = new File(this.fileDirectory);
 		String[] fList = dir.list();
