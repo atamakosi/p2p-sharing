@@ -50,7 +50,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
      */
     public MainUI() {
         initComponents();
-        setSize(800,800);
+        setSize(400,600);
         contentPnl = new JPanel();
         contentPnl.setLayout(new BorderLayout());
         toolBar = new JToolBar();
@@ -69,6 +69,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         toolBar.setFloatable(false);
         filePnl = new JPanel();
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
+        //fileTxtArea = new JTextArea(); 
         //TO DO : add file names from peers to JList for selection
         fileList = new JList();
         filePnl.add(fileList);
@@ -92,16 +93,31 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     
     @Override
     public void update(Map<InetAddress, PeerNode> peers) {
+        //Add new peers to ui
         peerPnl.removeAll();
         Iterator it = peers.values().iterator();
         while (it.hasNext())   {
             String str = it.next().toString();
-            System.out.println(str);
+            System.out.println("Server: " + str);
             JLabel pTxt = new JLabel(str);
             peerPnl.add(pTxt, gridBagConstraint);
         }
         peerPnl.repaint();
         this.revalidate();
+        
+        
+        //Add new files to ui waiting on PeerNode.geFileList()
+        filePnl.removeAll();
+        Iterator it2 = node.getFileList().iterator();
+        while (it2.hasNext()) {
+            String str = it2.next().toString();
+            System.out.println("File: " + str);
+            JLabel fTxt = new JLabel(str);
+            filePnl.add(fTxt);
+        }
+        filePnl.repaint();
+        this.revalidate();
+        
     }
     
     
@@ -180,6 +196,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new MainUI().setVisible(true);
             }
