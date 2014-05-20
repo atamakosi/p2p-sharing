@@ -6,6 +6,7 @@ package Model;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,12 @@ public class PeerNode implements PeerListener {
         pComms = new PeerComms();
         commsThread = new Thread(pComms);
         observers = new ArrayList<>();
-		fileServer = new RMIFileServer(System.getProperty("user.home");
+        try {
+            fileServer = new RMIFileServer(System.getProperty("user.home"));
+        } catch (RemoteException e) {
+            System.err.println("Error making the rmi server: " );
+            e.printStackTrace();
+        }
     }
 
     /**
