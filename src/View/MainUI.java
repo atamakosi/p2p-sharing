@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 
@@ -37,6 +38,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JToolBar toolBar;
     private JButton getBtn;
     private JButton disconnectBtn;
+    private JButton putBtn;
+    private JTextField searchFld;
     
     /**
      * Creates new form MainUI
@@ -48,9 +51,15 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         contentPnl.setLayout(new BorderLayout());
         toolBar = new JToolBar();
         getBtn = new JButton("GET");
+        putBtn = new JButton("PUT");
         disconnectBtn = new JButton("Disconnect");
+        searchFld = new JTextField();
+        searchFld.setSize(100, WIDTH);
+        searchFld.setToolTipText("Search...");
         toolBar.add(getBtn);
+        toolBar.add(putBtn);
         toolBar.add(disconnectBtn);
+        toolBar.add(searchFld);
         filePnl = new JPanel();
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
 //        fileTxtArea = new JTextArea(); 
