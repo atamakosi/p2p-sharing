@@ -40,6 +40,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JButton disconnectBtn;
     private JButton putBtn;
     private JTextField searchFld;
+    private JButton searchBtn;
     
     /**
      * Creates new form MainUI
@@ -53,6 +54,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         getBtn = new JButton("GET");
         putBtn = new JButton("PUT");
         disconnectBtn = new JButton("Disconnect");
+        searchBtn = new JButton("Search");
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
@@ -60,6 +62,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         toolBar.add(putBtn);
         toolBar.add(disconnectBtn);
         toolBar.add(searchFld);
+        toolBar.add(searchBtn);
+        toolBar.setFloatable(false);
         filePnl = new JPanel();
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
 //        fileTxtArea = new JTextArea(); 
