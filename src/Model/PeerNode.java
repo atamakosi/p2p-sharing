@@ -44,6 +44,7 @@ public class PeerNode implements PeerListener {
         observers = new ArrayList<>();
         try {
             fileServer = new RMIFileServer(System.getProperty("user.home"));
+            System.out.println("RMI server up.");
         } catch (RemoteException e) {
             System.err.println("Error making the rmi server: " );
             e.printStackTrace();
