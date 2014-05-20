@@ -33,7 +33,6 @@ public class PeerNode implements PeerListener {
     private PeerDiscovery pDisc;
     private List<Observer> observers;
     private InetAddress leader = null;
-    
     private RMIFileServer fileServer;
 
     public PeerNode()   {
