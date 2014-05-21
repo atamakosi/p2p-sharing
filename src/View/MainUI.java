@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
 /**
@@ -44,6 +46,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JTextField searchFld;
     private JButton searchBtn;
     private GridBagConstraints gridBagConstraint;
+    private DefaultListModel listModel;
     
     /**
      * Creates new form MainUI
@@ -68,10 +71,14 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         toolBar.add(searchBtn);
         toolBar.setFloatable(false);
         filePnl = new JPanel();
+        filePnl.setLayout(new BorderLayout());
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
         //fileTxtArea = new JTextArea(); 
         //TO DO : add file names from peers to JList for selection
-        fileList = new JList();
+        listModel = new DefaultListModel();
+        fileList = new JList(listModel);
+        fileList.setLayoutOrientation(JList.VERTICAL);
+        fileList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         filePnl.add(fileList);
         peerPnl = new JPanel();
         peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -98,26 +105,24 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         Iterator it = peers.values().iterator();
         while (it.hasNext())   {
             String str = it.next().toString();
-            System.out.println("Server: " + str);
             JLabel pTxt = new JLabel(str);
             peerPnl.add(pTxt, gridBagConstraint);
         }
         peerPnl.repaint();
         this.revalidate();
-        
-        
+               
         //Add new files to ui waiting on PeerNode.geFileList()
-        filePnl.removeAll();
+//        filePnl.removeAll();
         Iterator it2 = node.getFileList().iterator();
         while (it2.hasNext()) {
             String str = it2.next().toString();
-            System.out.println("File: " + str);
-            JLabel fTxt = new JLabel(str);
-            filePnl.add(fTxt);
+//            System.out.println("File: " + str);
+//            JLabel fTxt = new JLabel(str);
+            listModel.addElement(str);
         }
-        filePnl.repaint();
-        this.revalidate();
         
+//        filePnl.repaint();
+//        this.revalidate();
     }
     
     
