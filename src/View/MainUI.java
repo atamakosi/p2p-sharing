@@ -47,6 +47,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JButton getBtn;
     private JButton disconnectBtn;
     private JButton putBtn;
+    private JButton refreshBtn;
     private JTextField searchFld;
     private JButton searchBtn;
     private GridBagConstraints gridBagConstraint;
@@ -72,8 +73,12 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Sending request for file...");
-                //need to implement retrieval in peernode
-                //node.getFile(fileList.getSelected()); for example
+                int fileListIndex = fileList.getSelectedIndex();
+                if (fileListIndex >= 0) {
+                    String file = (String) fileListModel.get(fileListIndex);
+                    System.out.println("File sellected is " + file);
+                    getFile(file);
+                }
             }
         });
         putBtn = new JButton("PUT");
@@ -85,12 +90,21 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 //need to implement remote method call to get file from local
             }
         });
+        refreshBtn = new JButton("REFRESH");
+        refreshBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update(node.getPeers());
+            }
+        });
 //        disconnectBtn = new JButton("Disconnect");
       
         searchBtn = new JButton("Search");
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
+        toolBar.add(refreshBtn);
         toolBar.add(getBtn);
         toolBar.add(putBtn);
 //        toolBar.add(disconnectBtn);
@@ -168,7 +182,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         }
         System.out.println("File found on " + serverNote);
         if (!serverNote.equals("none")) {
-            
+            node.getFileFromServer(serverNote, fname);
         }
     }
     
