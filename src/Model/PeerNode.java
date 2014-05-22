@@ -35,6 +35,7 @@ public class PeerNode implements PeerListener {
     private InetAddress leader = null;
     private RMIFileServer fileServer;
     private Leader leaderSelection;
+    private ClockSet clock;
     private ArrayList<FileServerList> servers; //contains list of servers and there respective files.
 
     public PeerNode()   {
@@ -55,6 +56,8 @@ public class PeerNode implements PeerListener {
             System.err.println("Error making the rmi server: " );
             e.printStackTrace();
         }
+        clock = new ClockSet(this);
+        
     }
 
     /**
@@ -78,6 +81,7 @@ public class PeerNode implements PeerListener {
             pComms.join();
             pDisc.join();
             leaderSelection.join();
+            clock.join();
         }   catch (InterruptedException e)  {
             
         }
@@ -137,10 +141,10 @@ public class PeerNode implements PeerListener {
     public void getFileFromServer(String ip, String filename) {
         //needs to be implemented
         //System.out.println("hasn't been implemented yet");
-        /*if (ip.equals(address)) {
+        if (ip.equals(address)) {
             System.out.println("That is already your file stupid.");
             System.out.println("Retreival cancelled!");
-        } else {*/
+        } else {
             try {
                 RMIFileClient fc = new RMIFileClient(ip);
                 fc.getRemoteFile(filename);
@@ -148,7 +152,7 @@ public class PeerNode implements PeerListener {
                 System.out.println("Trouble getting file from client " + ip);
                 e.printStackTrace();
             }
-        //}
+        }
     }
   
     
@@ -173,6 +177,7 @@ public class PeerNode implements PeerListener {
         pComms.start();
         pDisc.start();
         leaderSelection.start();
+        clock.start();
     }
     
     public void setLeader(InetAddress leader)   {
