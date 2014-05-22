@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -98,16 +99,21 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 update(node.getPeers());
             }
         });
-//        disconnectBtn = new JButton("Disconnect");
       
         searchBtn = new JButton("Search");
+        searchBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchFileNames();
+            }
+        });
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
         toolBar.add(refreshBtn);
         toolBar.add(getBtn);
         toolBar.add(putBtn);
-//        toolBar.add(disconnectBtn);
         toolBar.add(searchFld);
         toolBar.add(searchBtn);
         toolBar.setFloatable(false);
@@ -183,6 +189,43 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         System.out.println("File found on " + serverNote);
         if (!serverNote.equals("none")) {
             node.getFileFromServer(serverNote, fname);
+        }
+    }
+    
+    public void searchFileNames()   {
+        String searchString = searchFld.getText();
+        System.out.println("String in search = " + searchString);
+        boolean found = false;
+        Iterator servers = node.getFileList().iterator();
+        while (servers.hasNext()) {
+            FileServerList fileList = (FileServerList) servers.next();
+            if (fileList.contains(searchString)) {
+                fileListModel.removeAllElements();
+                fileListModel.addElement(fileList.get(fileList.indexOf(searchString)));
+                filePnl.repaint();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            final JDialog searchResult = new JDialog();
+            searchResult.setSize(100, 100);
+            searchResult.setLayout(new BorderLayout());
+            JPanel searchPnl = new JPanel();
+            JLabel result = new JLabel("No results found!");
+            JButton okBtn = new JButton("OK");
+            okBtn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    update(node.getPeers());
+                    searchResult.dispose();
+                }
+            });
+            searchPnl.add(result);
+            searchPnl.add(okBtn);
+            searchResult.add(searchPnl);
+            searchResult.setVisible(true);
         }
     }
     
