@@ -92,6 +92,7 @@ public class PeerComms extends Thread {
     
     public void disconnect()    {
             dSocket.close();
+            System.out.println("socket closed");
     }
     
     public void leavingP2PNetwork() {

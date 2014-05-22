@@ -67,7 +67,7 @@ public class PeerDiscovery extends Thread {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 while (serverSocket != null )    {
                     serverSocket.receive(packet);
-                    p = new PeerNode(packet.getAddress());
+                    p = new PeerNode(packet.getAddress().getHostAddress());
                     exists = localPeerNode.addPeerNode(p);
                     if ( exists && Longs.fromByteArray(packet.getData()) == 0)   {
                         localPeerNode.removePeerNode(p);

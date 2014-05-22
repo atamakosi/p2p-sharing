@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 public class PeerNode implements PeerListener {
        
     private final int PORT = 33000;
-    private static Map<InetAddress, PeerNode> peers;
+    private static Map<String, PeerNode> peers;
     private boolean run = true;
-    private InetAddress address;
+    public String address;
     private Thread commsThread;
     private PeerComms pComms;
     private PeerDiscovery pDisc;
@@ -40,7 +40,7 @@ public class PeerNode implements PeerListener {
         peers = new HashMap<>();
         pDisc = new PeerDiscovery(this);
         try {
-            address = InetAddress.getLocalHost();
+            address = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException ex) {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,7 +60,7 @@ public class PeerNode implements PeerListener {
      * constructor to store incoming Peer connections.  
      * @param address
      */
-    public PeerNode(InetAddress address)   {
+    public PeerNode(String address)   {
         this.address = address;
     }
 
@@ -80,18 +80,23 @@ public class PeerNode implements PeerListener {
         }
     }
     
-    public Map<InetAddress, PeerNode> getPeers()    {
+    public Map<String, PeerNode> getPeers()    {
         return peers;
     }
     
+    public String getAddress() {
+        return this.address;
+    }
+    
     public boolean addPeerNode(PeerNode n) {
-        if (!peers.containsKey(n.address))  {
-            peers.put(n.address, n);
+        if (!peers.containsKey(n.toString()) && !n.toString().equalsIgnoreCase(address))  {
+            peers.put(n.getAddress(), n);
             System.out.println("Peer added to Map");
             notifyListeners();
             return true;
         }   else    {
             System.out.println("Peer exists in List");
+            System.out.println("Peer rejected : " + n.toString());
             return false;
         }
     }
@@ -127,7 +132,7 @@ public class PeerNode implements PeerListener {
     
     @Override
     public String toString()    {
-        return address.getHostAddress();
+        return address;
     }
     
     /**
@@ -136,6 +141,13 @@ public class PeerNode implements PeerListener {
      * in the P2P network, which it might usurp.
      */
     public void start() {
+        if (!pComms.isAlive() || 
+                !pDisc.isAlive() || 
+                    !leaderSelection.isAlive()) {
+            pComms = new PeerComms();
+            pDisc = new PeerDiscovery(this);
+            leaderSelection = new Leader(this);
+        }
         pComms.start();
         pDisc.start();
         leaderSelection.start();

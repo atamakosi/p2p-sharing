@@ -15,5 +15,5 @@ import java.util.Map;
  */
 public interface Observer {
     
-    public void update(Map<InetAddress, PeerNode> peers);
+    public void update(Map<String, PeerNode> peers);
 }

@@ -28,7 +28,7 @@ import javax.swing.JToolBar;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
-import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -52,6 +52,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private DefaultListModel fileListModel;
     private JList peerList;
     private DefaultListModel peerListModel;
+    private JScrollPane peerScroll;
+    private JScrollPane fileScroll;
     
     /**
      * Creates new form MainUI
@@ -97,23 +99,24 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         filePnl = new JPanel();
         filePnl.setLayout(new BorderLayout());
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
-
+        
         fileListModel = new DefaultListModel();
         fileList = new JList(fileListModel);
         fileList.setLayoutOrientation(JList.VERTICAL);
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        filePnl.add(fileList);
+        fileScroll = new JScrollPane(fileList);
+        filePnl.add(fileScroll);
      
         peerPnl = new JPanel();
         peerPnl.setLayout(new BorderLayout());
-        peerPnl.setSize(75, 600);
         peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
         peerListModel = new DefaultListModel();
         peerList = new JList(peerListModel);
         peerList.setLayoutOrientation(JList.VERTICAL);
         peerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        peerPnl.add(peerList);
+        peerScroll = new JScrollPane(peerList);
+        peerPnl.add(peerScroll);
 
         contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
@@ -135,9 +138,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         Iterator it = peers.values().iterator();
         while (it.hasNext())   {
             String str = it.next().toString();
-            if (peerListModel.contains(str))    {
-                peerListModel.addElement(str);
-            }
+            peerListModel.addElement(str);
         }
         //Add new files to ui waiting on PeerNode.geFileList()
         Iterator it2 = node.getFileList().iterator();
@@ -167,6 +168,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         exitItm = new javax.swing.JMenuItem();
         editMnu = new javax.swing.JMenu();
         settingsItm = new javax.swing.JMenuItem();
+        debugItm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -203,6 +205,14 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         settingsItm.setText("Settings");
         editMnu.add(settingsItm);
 
+        debugItm.setText("Debug");
+        debugItm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                debugItmActionPerformed(evt);
+            }
+        });
+        editMnu.add(debugItm);
+
         menuBar.add(editMnu);
 
         setJMenuBar(menuBar);
@@ -234,6 +244,10 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         connectItm.setEnabled(true);
         disconnectItm.setEnabled(false);
     }//GEN-LAST:event_disconnectItmActionPerformed
+
+    private void debugItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugItmActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_debugItmActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,6 +287,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem connectItm;
+    private javax.swing.JMenuItem debugItm;
     private javax.swing.JMenuItem disconnectItm;
     private javax.swing.JMenu editMnu;
     private javax.swing.JMenuItem exitItm;
