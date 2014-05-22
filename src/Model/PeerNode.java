@@ -37,6 +37,7 @@ public class PeerNode implements PeerListener {
     private Leader leaderSelection;
     private Map<PeerNode, Long> vectorStamps;
     private long time = 0;
+    private ArrayList<FileServerList> servers; //contains list of servers and there respective files.
 
     public PeerNode()   {
         peers = new HashMap<>();
@@ -140,21 +141,40 @@ public class PeerNode implements PeerListener {
 
     public ArrayList getFileList() {
         Iterator it = peers.values().iterator();
-        ArrayList<String> al = new ArrayList<>();
+        servers = new ArrayList<>();
         String fcip = "";
         while (it.hasNext()) {
             try {
                 fcip = it.next().toString();
                 RMIFileClient fc = new RMIFileClient(fcip);
                 String[] list = fc.searchForList();
-                al.addAll(Arrays.asList(list));
+                FileServerList fslist = new FileServerList(fcip);
+                fslist.addAll(Arrays.asList(list));
+                servers.add(fslist);
             } catch (RemoteException e) {
                 System.out.println("Had RemoteException generating client " + fcip);
             } catch (NotBoundException e) {
                 System.out.println("Had NotBoundException generating client " + fcip);
             }
         }
-        return al;
+        return servers;
+    }
+    
+    public void getFileFromServer(String ip, String filename) {
+        //needs to be implemented
+        //System.out.println("hasn't been implemented yet");
+        /*if (ip.equals(address)) {
+            System.out.println("That is already your file stupid.");
+            System.out.println("Retreival cancelled!");
+        } else {*/
+            try {
+                RMIFileClient fc = new RMIFileClient(ip);
+                fc.getRemoteFile(filename);
+            } catch (Exception e) {
+                System.out.println("Trouble getting file from client " + ip);
+                e.printStackTrace();
+            }
+        //}
     }
   
     

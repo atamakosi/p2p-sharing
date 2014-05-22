@@ -6,6 +6,7 @@
 
 package View;
 
+import Model.FileServerList;
 import Model.Observer;
 import Model.PeerNode;
 import java.awt.BorderLayout;
@@ -18,17 +19,17 @@ import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -46,6 +47,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JButton getBtn;
     private JButton disconnectBtn;
     private JButton putBtn;
+    private JButton refreshBtn;
     private JTextField searchFld;
     private JButton searchBtn;
     private GridBagConstraints gridBagConstraint;
@@ -71,8 +73,12 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Sending request for file...");
-                //need to implement retrieval in peernode
-                //node.getFile(fileList.getSelected()); for example
+                int fileListIndex = fileList.getSelectedIndex();
+                if (fileListIndex >= 0) {
+                    String file = (String) fileListModel.get(fileListIndex);
+                    System.out.println("File sellected is " + file);
+                    getFile(file);
+                }
             }
         });
         putBtn = new JButton("PUT");
@@ -84,12 +90,21 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 //need to implement remote method call to get file from local
             }
         });
+        refreshBtn = new JButton("REFRESH");
+        refreshBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update(node.getPeers());
+            }
+        });
 //        disconnectBtn = new JButton("Disconnect");
       
         searchBtn = new JButton("Search");
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
+        toolBar.add(refreshBtn);
         toolBar.add(getBtn);
         toolBar.add(putBtn);
 //        toolBar.add(disconnectBtn);
@@ -141,14 +156,34 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             peerListModel.addElement(str);
         }
         //Add new files to ui waiting on PeerNode.geFileList()
-        Iterator it2 = node.getFileList().iterator();
-        while (it2.hasNext()) {
-            String str = it2.next().toString();
-            fileListModel.addElement(str);
+        Iterator serIt = node.getFileList().iterator();
+        while (serIt.hasNext()) {
+            FileServerList fileList = (FileServerList) serIt.next();
+            Iterator filIt = fileList.iterator();
+            while (filIt.hasNext()) {
+                String str = filIt.next().toString();
+                fileListModel.addElement(str);
+            }
         }
 //        filePnl.repaint();
 //        peerPnl.repaint();
         this.revalidate();
+    }
+    
+    public void getFile(String fname) {
+        //Get list of servers with files
+        Iterator servers = node.getFileList().iterator();
+        String serverNote = "none";
+        while (servers.hasNext()) {
+            FileServerList fileList = (FileServerList) servers.next();
+            if (fileList.contains(fname)) {
+                serverNote = fileList.toString();
+            }
+        }
+        System.out.println("File found on " + serverNote);
+        if (!serverNote.equals("none")) {
+            node.getFileFromServer(serverNote, fname);
+        }
     }
     
     

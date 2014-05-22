@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,21 +27,21 @@ public class RMIFileClient {
 	}
 
 	public void getRemoteFile(String name) throws IOException {
-		File inFile = fi.getFile(name);
+		byte[] in = fi.getFile(name);
 		String newFile = System.getProperty("user.dir");
 		newFile += System.getProperty("file.separator");
 		newFile += "files" + System.getProperty("file.separator");
-		newFile += inFile.getName();
+		newFile += name;
 		File outFile = new File(newFile);
-		InputStream inStream = new FileInputStream(inFile);
-		OutputStream outStream = new FileOutputStream(outFile);
-		byte[] buf = new byte[1024];
-		int bytRead;
-		while ((bytRead = inStream.read(buf)) > 0) {
-			outStream.write(buf, 0, bytRead);
-		}
-		inStream.close();
-		outStream.close();
+                System.out.println("Out file is " + outFile.getAbsolutePath());
+                if (!outFile.exists()) {
+                    outFile.createNewFile();
+                    System.out.println("File created");
+                }
+		BufferedOutputStream out = new BufferedOutputStream(
+                        new FileOutputStream(outFile));
+                out.write(in, 0, in.length);
+		out.close();
 
 	}
 }
