@@ -12,10 +12,10 @@ import Model.PeerNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -30,7 +30,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
 
 /**
  *
@@ -111,6 +110,23 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
+        searchFld.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)    {
+                    searchFileNames();
+                }
+            }
+        });
         toolBar.add(refreshBtn);
         toolBar.add(getBtn);
         toolBar.add(putBtn);
@@ -171,8 +187,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 fileListModel.addElement(str);
             }
         }
-//        filePnl.repaint();
-//        peerPnl.repaint();
+
         this.revalidate();
     }
     
