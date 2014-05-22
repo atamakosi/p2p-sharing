@@ -65,11 +65,12 @@ public class PeerDiscovery extends Thread {
             try {
                 buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                while (serverSocket != null )    {
+                while (!serverSocket.isClosed() )    {
                     serverSocket.receive(packet);
                     p = new PeerNode(packet.getAddress().getHostAddress());
                     exists = localPeerNode.addPeerNode(p);
-                    if ( exists && Longs.fromByteArray(packet.getData()) == 0)   {
+                    if ( exists && (Longs.fromByteArray(packet.getData()) == 999999))   {
+                        System.out.println("Received P2P removal request");
                         localPeerNode.removePeerNode(p);
                     }
                     buffer = null;
@@ -83,6 +84,7 @@ public class PeerDiscovery extends Thread {
     
     public void requestStop()  {
         run = false;
+        System.out.println("Peer Discover stop = " + run);
     }
     
     public void disconnect()    {
@@ -91,6 +93,7 @@ public class PeerDiscovery extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(PeerDiscovery.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Peer Discovery closed");
         serverSocket.close();
     }
 }

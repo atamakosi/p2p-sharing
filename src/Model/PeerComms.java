@@ -51,7 +51,6 @@ public class PeerComms extends Thread {
     @Override
     public void run()   {
         broadcast();
-        
         disconnect();
     }
     
@@ -97,12 +96,13 @@ public class PeerComms extends Thread {
     
     public void leavingP2PNetwork() {
         byte[] buffer = new byte[256];
-        long msg = 0;
+        long msg = 999999;
         buffer = Longs.toByteArray(msg);
         DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
         try {
             dSocket.send(dPacket);
             System.out.println("send leaving notification to p2p network");
+            System.out.println("packet sent = " + Longs.fromByteArray(dPacket.getData()));
         } catch (IOException ex) {
             Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
         }

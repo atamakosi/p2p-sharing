@@ -135,7 +135,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         peerListModel.removeAllElements();
         fileListModel.removeAllElements();
         
-        Iterator it = peers.values().iterator();
+        Iterator it = node.getPeers().values().iterator();
         while (it.hasNext())   {
             String str = it.next().toString();
             peerListModel.addElement(str);
@@ -148,7 +148,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         }
 //        filePnl.repaint();
 //        peerPnl.repaint();
-//        this.revalidate();
+        this.revalidate();
     }
     
     

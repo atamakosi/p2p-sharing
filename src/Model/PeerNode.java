@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class PeerNode implements PeerListener {
        
     private final int PORT = 33000;
-    private static Map<String, PeerNode> peers;
+    private Map<String, PeerNode> peers;
     private boolean run = true;
     public String address;
     private Thread commsThread;
@@ -68,6 +68,8 @@ public class PeerNode implements PeerListener {
         pComms.requestStop();
         pDisc.requestStop();
         leaderSelection.requestStop();
+        this.peers.clear();
+        notifyListeners();
     }
     
     public void stopThreads()   {
@@ -89,13 +91,13 @@ public class PeerNode implements PeerListener {
     }
     
     public boolean addPeerNode(PeerNode n) {
-        if (!peers.containsKey(n.toString()) && !n.toString().equalsIgnoreCase(address))  {
+        String nodeAddress = n.toString();
+        if (!peers.containsKey(nodeAddress) && nodeAddress.equalsIgnoreCase(address))  {
             peers.put(n.getAddress(), n);
             System.out.println("Peer added to Map");
             notifyListeners();
             return true;
         }   else    {
-            System.out.println("Peer exists in List");
             System.out.println("Peer rejected : " + n.toString());
             return false;
         }
