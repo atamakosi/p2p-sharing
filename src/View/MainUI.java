@@ -28,6 +28,7 @@ import javax.swing.JToolBar;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
+import javax.swing.JTable;
 
 /**
  *
@@ -48,7 +49,9 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JTextField searchFld;
     private JButton searchBtn;
     private GridBagConstraints gridBagConstraint;
-    private DefaultListModel listModel;
+    private DefaultListModel fileListModel;
+    private JList peerList;
+    private DefaultListModel peerListModel;
     
     /**
      * Creates new form MainUI
@@ -94,20 +97,24 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         filePnl = new JPanel();
         filePnl.setLayout(new BorderLayout());
         filePnl.setBorder(BorderFactory.createLineBorder(Color.black));
-        //fileTxtArea = new JTextArea(); 
-        //TO DO : add file names from peers to JList for selection
-        listModel = new DefaultListModel();
-        fileList = new JList(listModel);
+
+        fileListModel = new DefaultListModel();
+        fileList = new JList(fileListModel);
         fileList.setLayoutOrientation(JList.VERTICAL);
-        fileList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         filePnl.add(fileList);
+     
         peerPnl = new JPanel();
+        peerPnl.setLayout(new BorderLayout());
+        peerPnl.setSize(75, 600);
         peerPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        peerPnl.setLayout(new GridBagLayout());
-        //adds new peers to top of panel and stacks them vertically
-        gridBagConstraint = new GridBagConstraints();
-        gridBagConstraint.anchor = GridBagConstraints.NORTH;
-        gridBagConstraint.weighty = 1;
+        
+        peerListModel = new DefaultListModel();
+        peerList = new JList(peerListModel);
+        peerList.setLayoutOrientation(JList.VERTICAL);
+        peerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        peerPnl.add(peerList);
+
         contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);
@@ -120,29 +127,26 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     }
     
     @Override
-    public void update(Map<InetAddress, PeerNode> peers) {
+    public void update(Map<String, PeerNode> peers) {
         //Add new peers to ui
-        peerPnl.removeAll();
+        peerListModel.removeAllElements();
+        fileListModel.removeAllElements();
+        
         Iterator it = peers.values().iterator();
         while (it.hasNext())   {
             String str = it.next().toString();
-            JLabel pTxt = new JLabel(str);
-            peerPnl.add(pTxt, gridBagConstraint);
+            if (peerListModel.contains(str))    {
+                peerListModel.addElement(str);
+            }
         }
-        peerPnl.repaint();
-        this.revalidate();
-               
         //Add new files to ui waiting on PeerNode.geFileList()
-//        filePnl.removeAll();
         Iterator it2 = node.getFileList().iterator();
         while (it2.hasNext()) {
             String str = it2.next().toString();
-//            System.out.println("File: " + str);
-//            JLabel fTxt = new JLabel(str);
-            listModel.addElement(str);
+            fileListModel.addElement(str);
         }
-        
 //        filePnl.repaint();
+//        peerPnl.repaint();
 //        this.revalidate();
     }
     
@@ -208,8 +212,9 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
     private void exitItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItmActionPerformed
         node.stopSockets();
-        node.stopThreads();
+//        node.stopThreads();
         dispose();
+        System.exit(1);
     }//GEN-LAST:event_exitItmActionPerformed
 
     private void connectItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectItmActionPerformed
