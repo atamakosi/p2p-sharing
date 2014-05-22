@@ -34,6 +34,7 @@ public class PeerNode implements PeerListener {
     private List<Observer> observers;
     private InetAddress leader = null;
     private RMIFileServer fileServer;
+    private Leader leaderSelection;
 
     public PeerNode()   {
         peers = new HashMap<>();
@@ -44,7 +45,7 @@ public class PeerNode implements PeerListener {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
         pComms = new PeerComms();
-        commsThread = new Thread(pComms);
+        leaderSelection = new Leader(this);
         observers = new ArrayList<>();
         try {
             fileServer = new RMIFileServer(System.getProperty("user.home"));
@@ -63,14 +64,19 @@ public class PeerNode implements PeerListener {
         this.address = address;
     }
 
-    public void stop()  {
-        pComms.stopRun();
-        pDisc.stopRun();
+    public void stopSockets()  {
+        pComms.requestStop();
+        pDisc.requestStop();
+        leaderSelection.requestStop();
+    }
+    
+    public void stopThreads()   {
         try {
-            commsThread.join();
+            pComms.join();
             pDisc.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+            leaderSelection.join();
+        }   catch (InterruptedException e)  {
+            
         }
     }
     
@@ -78,12 +84,21 @@ public class PeerNode implements PeerListener {
         return peers;
     }
     
-    public void addPeerNode(PeerNode n) {
+    public boolean addPeerNode(PeerNode n) {
         if (!peers.containsKey(n.address))  {
             peers.put(n.address, n);
             System.out.println("Peer added to Map");
             notifyListeners();
+            return true;
+        }   else    {
+            System.out.println("Peer exists in List");
+            return false;
         }
+    }
+    
+    public void removePeerNode(PeerNode n)  {
+        peers.remove(n);
+        notifyListeners();
     }
 
     public ArrayList getFileList() {
@@ -108,6 +123,7 @@ public class PeerNode implements PeerListener {
         }
         return al;
     }
+  
     
     @Override
     public String toString()    {
@@ -120,13 +136,9 @@ public class PeerNode implements PeerListener {
      * in the P2P network, which it might usurp.
      */
     public void start() {
-        commsThread.start();
+        pComms.start();
         pDisc.start();
-        if ( leader == null )   {
-            Leader leaderSelection = new Leader(this);
-            Thread leaderThread = new Thread(leaderSelection);
-            leaderThread.start();
-        }
+        leaderSelection.start();
     }
     
     public void setLeader(InetAddress leader)   {

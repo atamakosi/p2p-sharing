@@ -43,22 +43,4 @@ public class RMIFileClient {
 		outStream.close();
 
 	}
-        
-        /*
-	public static void main(String[] args) {
-		try {
-			RMIFileClient fc = new RMIFileClient("localhost");
-			String[] list = fc.searchForList();
-			for (String file : list) {
-				System.out.println("F: " + file);
-			}
-			fc.getRemoteFile("joel");
-		} catch (RemoteException e) {
-			System.err.println("Unable to use regsitry: " + e);
-		} catch (NotBoundException e) {
-			System.err.println("Name FServer not currently bound: " + e);
-		} catch (IOException e) {
-			System.err.println("Problem getting file: " + e);
-		}
-	}*/
 }

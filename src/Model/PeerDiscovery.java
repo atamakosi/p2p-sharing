@@ -6,6 +6,7 @@
 
 package Model;
 
+import com.google.common.primitives.Longs;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 public class PeerDiscovery extends Thread {
 
     private PeerNode localPeerNode;
-    private boolean run = true;
+    private volatile boolean run = true;
     private final int PORT = 33000;
     private final String GROUP = "224.0.0.2";
     private MulticastSocket serverSocket;
@@ -31,7 +32,6 @@ public class PeerDiscovery extends Thread {
         this.localPeerNode = localPeerNode;
         try {
             serverSocket = new MulticastSocket(PORT);
-            System.out.println("Listening on port " + serverSocket.getLocalPort());
             group = InetAddress.getByName(GROUP);
             serverSocket.joinGroup(group);
         } catch (IOException ex) {
@@ -41,26 +41,51 @@ public class PeerDiscovery extends Thread {
     
     @Override
     public void run() {
-        try {
-            byte[] buffer = new byte[256];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            System.out.println("begin receive...");
-            while (run) {
-                serverSocket.receive(packet);
-                System.out.println("Receiving...");
-                System.out.println("received " + packet.getAddress());
-                p = new PeerNode(packet.getAddress());
-                localPeerNode.addPeerNode(p);
-                
+        listen();
+        disconnect();
+    }
+    
+    private void connect()  {
+        if (serverSocket == null || serverSocket.isClosed())    {
+            try {
+                System.out.println("rebind server socket!");
+                serverSocket = new MulticastSocket(PORT);
+                serverSocket.joinGroup(group);
+            } catch (IOException ex) {
+                Logger.getLogger(PeerDiscovery.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    private void listen()   {
+        byte[] buffer;
+        boolean exists = false;
+        while (run) {
+            connect();
+            try {
+                buffer = new byte[256];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                while (serverSocket != null )    {
+                    serverSocket.receive(packet);
+                    p = new PeerNode(packet.getAddress());
+                    exists = localPeerNode.addPeerNode(p);
+                    if ( exists && Longs.fromByteArray(packet.getData()) == 0)   {
+                        localPeerNode.removePeerNode(p);
+                    }
+                    buffer = null;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+    }
     
-    public void stopRun()  {
+    public void requestStop()  {
         run = false;
+    }
+    
+    public void disconnect()    {
         try {
             serverSocket.leaveGroup(group);
         } catch (IOException ex) {

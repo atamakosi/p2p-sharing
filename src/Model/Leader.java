@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * peer to peer network.  
  * @author Adam
  */
-public class Leader implements Runnable {
+public class Leader extends Thread {
     
     //class D network group to join
     private final String GROUP = "224.0.0.2";
@@ -70,21 +70,33 @@ public class Leader implements Runnable {
      * other peers set it as the leader.
      */
     public void receiveMessage()   {
-       try {
-            byte[] buffer = new byte[1024];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            serverSocket.receive(packet);
-            buffer = packet.getData();
-            long id = Longs.fromByteArray(buffer);
-            if (id < ownID ) {
-                startElection();
-            }   else    {
-                node.setLeader(packet.getAddress());
-            }   
-            
+        byte[] buffer;
+        long id;
+        while (run)  {
+            try {
+                buffer = new byte[1024];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                while (serverSocket != null)    {
+                    serverSocket.receive(packet);
+                    buffer = packet.getData();
+                    id = Longs.fromByteArray(buffer);
+                    if (id < ownID ) {
+                        startElection();
+                    }   else    {
+                        node.setLeader(packet.getAddress());
+                    }   
+                }
+                buffer = null;
+            } catch (IOException ex) {
+                Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       }
+        try {
+            serverSocket.leaveGroup(group);
         } catch (IOException ex) {
-            Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
         }
+        serverSocket.close();
     }
     
     /**
@@ -103,7 +115,7 @@ public class Leader implements Runnable {
      */
     private void sendPacket(byte[] buffer)   {
         try {
-            group = InetAddress.getByName(GROUP);
+            
             DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
             DatagramSocket dSocket = new DatagramSocket();
             dSocket.send(dPacket);
@@ -129,12 +141,7 @@ public class Leader implements Runnable {
     /**
      * stops thread actions
      */
-    public void stop()  {
-        try {
-            serverSocket.leaveGroup(group);
-            run = false;
-        } catch (IOException ex) {
-            Logger.getLogger(Leader.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void requestStop()  {
+        run = false;
     }
 }
