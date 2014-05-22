@@ -13,14 +13,16 @@ import java.util.Date;
 public class RMIFileServer implements RMIFileInterface {
 
 	private String fileDirectory;
+        private ClockSet clock;
 
-	public RMIFileServer(String fileDir) throws RemoteException {
-        this.fileDirectory = fileDir;
-        RMIFileInterface stub = (RMIFileInterface) 
-                UnicastRemoteObject.exportObject(this,1099);
-        Registry reg = LocateRegistry.createRegistry(1099);
-        reg.rebind("FServer", stub);
-        System.out.println("Names bound in the registry");
+	public RMIFileServer(String fileDir, ClockSet cs) throws RemoteException {
+            this.fileDirectory = fileDir;
+            RMIFileInterface stub = (RMIFileInterface) 
+                    UnicastRemoteObject.exportObject(this,1099);
+            Registry reg = LocateRegistry.createRegistry(1099);
+            reg.rebind("FServer", stub);
+            System.out.println("Names bound in the registry");
+            this.clock = cs;
         }
 
 	@Override
@@ -58,6 +60,7 @@ public class RMIFileServer implements RMIFileInterface {
         
         @Override
         public void setTimeDifference(long t) {
+            clock.setOut(t);
             System.out.println("Difference in time is " + t);
         }
         

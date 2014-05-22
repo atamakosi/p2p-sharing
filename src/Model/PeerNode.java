@@ -55,13 +55,14 @@ public class PeerNode implements PeerListener {
         pComms = new PeerComms(this);
         leaderSelection = new Leader(this);
         observers = new ArrayList<>();
+        clock = new ClockSet(this);
         try {
-            fileServer = new RMIFileServer(System.getProperty("user.home"));
+            fileServer = new RMIFileServer(System.getProperty("user.home"), clock);
             System.out.println("RMI server up.");
         } catch (RemoteException e) {
             System.err.println("Error making the rmi server: " );
         }
-        clock = new ClockSet(this);
+        
         
     }
 
@@ -164,6 +165,10 @@ public class PeerNode implements PeerListener {
         return servers;
     }
     
+    public InetAddress getLeader() {
+        return this.leader;
+    }
+    
     public void getFileFromServer(String ip, String filename) {
         //needs to be implemented
         //System.out.println("hasn't been implemented yet");
@@ -180,7 +185,16 @@ public class PeerNode implements PeerListener {
             }
         }
     }
-  
+    
+    public boolean isLeader() {
+        boolean isLeader = false;
+        try {
+            isLeader = (this.leader == InetAddress.getLocalHost());
+        } catch (Exception e) {
+            System.out.println("Trying to check leader");
+        }
+        return isLeader;
+    }
     
     @Override
     public String toString()    {

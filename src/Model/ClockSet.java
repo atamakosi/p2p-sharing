@@ -6,6 +6,7 @@
 
 package Model;
 
+import java.net.InetAddress;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -30,6 +31,10 @@ public class ClockSet extends Thread {
         return out;
     }
     
+    public void setOut(long o) {
+        this.out = o;
+    }
+    
     @Override
     public void run() {
         checkTime();
@@ -38,14 +43,18 @@ public class ClockSet extends Thread {
     private void checkTime() {
         while (run) {
             try {
-                Iterator it = node.getPeers().values().iterator();
-                while(it.hasNext()) {
-                    System.out.println("Checking time.");
-                    String ip = it.next().toString();
-                    long difference = getTimeFromServer(ip);
-                    setAdjustedTime(difference/2, ip);
-                    Thread.sleep(3500);
+                if (node.isLeader()) {
+                    Iterator it = node.getPeers().values().iterator();
+                    while(it.hasNext()) {
+                        System.out.println("Checking time.");
+                        String ip = it.next().toString();
+                        long difference = getTimeFromServer(ip);
+                        setAdjustedTime(difference/2, ip);
+                    }
+                } else {
+                    System.out.println("Guess i'm not leader :(");
                 }
+                Thread.sleep(10000);
             } catch (Exception e) {
                 System.out.println("Trouble gettting time difference");
                 e.printStackTrace();

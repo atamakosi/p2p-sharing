@@ -62,7 +62,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
      */
     public MainUI() {
         initComponents();
-        setSize(400,600);
+        setSize(600,600);
         connectItm.setEnabled(false);
         contentPnl = new JPanel();
         contentPnl.setLayout(new BorderLayout());
