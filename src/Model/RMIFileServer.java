@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Date;
 
 public class RMIFileServer implements RMIFileInterface {
 
@@ -20,7 +21,7 @@ public class RMIFileServer implements RMIFileInterface {
         Registry reg = LocateRegistry.createRegistry(1099);
         reg.rebind("FServer", stub);
         System.out.println("Names bound in the registry");
-}
+        }
 
 	@Override
 	public String[] getFileList() {
@@ -48,5 +49,26 @@ public class RMIFileServer implements RMIFileInterface {
 		}
 		return buffer;
 	}
+        
+        @Override
+        public long getTime() {
+            Date d = new Date();
+            return d.getTime();
+        }
+        
+        @Override
+        public void setTimeDifference(long t) {
+            System.out.println("Difference in time is " + t);
+        }
+        
+        /*
+	public static void main(String[] args) {
+		try {
+			RMIFileServer fs = new RMIFileServer("/home/joel/temp");
+		} catch (RemoteException e) {
+			System.err.println("Unable to bind to regsitry: " + e);
+		}
+		System.out.println("Main Method of FileServer done");
+	}*/
 }
 

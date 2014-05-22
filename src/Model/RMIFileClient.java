@@ -12,6 +12,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RMIFileClient {
 	
@@ -42,6 +44,25 @@ public class RMIFileClient {
                         new FileOutputStream(outFile));
                 out.write(in, 0, in.length);
 		out.close();
-
 	}
+        
+        public long getServerTime() {
+            long time = 0;
+            try {
+                time =  fi.getTime();
+            } catch (RemoteException ex) {
+                System.out.println("Error: rmiclient remote exception");
+                ex.printStackTrace();
+            }
+            return time;
+        }
+        
+        public void setServerDifference(long dif) {
+            try {
+                fi.setTimeDifference(dif);
+            } catch (RemoteException ex) {
+                System.out.println("Error: rmiclient remote exception");
+                ex.printStackTrace();
+            }
+        }
 }
