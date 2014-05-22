@@ -6,6 +6,7 @@
 
 package View;
 
+import Model.FileServerList;
 import Model.Observer;
 import Model.PeerNode;
 import java.awt.BorderLayout;
@@ -18,17 +19,17 @@ import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -141,14 +142,34 @@ public class MainUI extends javax.swing.JFrame implements Observer {
             peerListModel.addElement(str);
         }
         //Add new files to ui waiting on PeerNode.geFileList()
-        Iterator it2 = node.getFileList().iterator();
-        while (it2.hasNext()) {
-            String str = it2.next().toString();
-            fileListModel.addElement(str);
+        Iterator serIt = node.getFileList().iterator();
+        while (serIt.hasNext()) {
+            FileServerList fileList = (FileServerList) serIt.next();
+            Iterator filIt = fileList.iterator();
+            while (filIt.hasNext()) {
+                String str = filIt.next().toString();
+                fileListModel.addElement(str);
+            }
         }
 //        filePnl.repaint();
 //        peerPnl.repaint();
         this.revalidate();
+    }
+    
+    public void getFile(String fname) {
+        //Get list of servers with files
+        Iterator servers = node.getFileList().iterator();
+        String serverNote = "none";
+        while (servers.hasNext()) {
+            FileServerList fileList = (FileServerList) servers.next();
+            if (fileList.contains(fname)) {
+                serverNote = fileList.toString();
+            }
+        }
+        System.out.println("File found on " + serverNote);
+        if (!serverNote.equals("none")) {
+            
+        }
     }
     
     

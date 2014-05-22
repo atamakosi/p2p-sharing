@@ -35,6 +35,7 @@ public class PeerNode implements PeerListener {
     private InetAddress leader = null;
     private RMIFileServer fileServer;
     private Leader leaderSelection;
+    private ArrayList<FileServerList> servers; //contains list of servers and there respective files.
 
     public PeerNode()   {
         peers = new HashMap<>();
@@ -110,7 +111,7 @@ public class PeerNode implements PeerListener {
 
     public ArrayList getFileList() {
         Iterator it = peers.values().iterator();
-        ArrayList<String> al = new ArrayList<>();
+        servers = new ArrayList<>();
         String fcip = "";
         while (it.hasNext()) {
             //System.out.println("New file client: " + it.next().toString());
@@ -119,7 +120,9 @@ public class PeerNode implements PeerListener {
                 fcip = it.next().toString();
                 RMIFileClient fc = new RMIFileClient(fcip);
                 String[] list = fc.searchForList();
-                al.addAll(Arrays.asList(list));
+                FileServerList fslist = new FileServerList(fcip);
+                fslist.addAll(Arrays.asList(list));
+                servers.add(fslist);
             } catch (RemoteException e) {
                 System.out.println("Had RemoteException generating client " + fcip);
                 e.printStackTrace();;
@@ -128,7 +131,12 @@ public class PeerNode implements PeerListener {
                 e.printStackTrace();
             }
         }
-        return al;
+        return servers;
+    }
+    
+    public void getFileFromServer(String ip) {
+        //needs to be implemented
+        System.out.println("hasn't been implemented yet");
     }
   
     
