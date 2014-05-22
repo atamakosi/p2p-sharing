@@ -28,8 +28,10 @@ public class PeerComms extends Thread {
     private volatile boolean run = true;
     private InetAddress group;
     private DatagramSocket dSocket;
+    private static PeerNode localPeerNode;
     
-    public PeerComms()  {
+    public PeerComms(PeerNode localPeerNode)  {
+        this.localPeerNode = localPeerNode;
         try {
             group = InetAddress.getByName(GROUP);
             dSocket = new DatagramSocket();
@@ -53,27 +55,38 @@ public class PeerComms extends Thread {
         broadcast();
         disconnect();
     }
-    
+    /**
+     * Due to the need to pass timestamps, disconnect notifications, etc. packet format
+     * is set as follows:
+     * bytes 0 - 7 reserved for disconnect notification as long 99999
+     * byte 8 reserved for snapshot notification
+     * bytes 9 - 16 reserved for vector timestamp long
+     */
     public void broadcast() {
         byte[] buffer = new byte[256];
         DatagramPacket dPacket;
+        byte[] timeStamp = new byte[8];
+        //for loop to merge byte arrays
+        for (int i = 0; i < timeStamp.length; i++)    {
+            buffer[9 + i] = timeStamp[i];
+        }
         while (run) {
             connect();
             try {
+                //broadcast empty data packet every 10 seconds
+                dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
+                //sending an empty packet still allows remote peer to get the IP address of sender
+                dSocket.send(dPacket);
+                localPeerNode.setVectorTimeStamp();
+                System.out.println("datapacket sent");
+                try {
+                    PeerComms.sleep(SLEEP);
+                    System.out.println("Sleeping comms");
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                dPacket = null;
 
-            //broadcast empty data packet every 10 seconds
-            dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
-            //sending an empty packet still allows remote peer to get the IP address of sender
-            dSocket.send(dPacket);
-            System.out.println("datapacket sent");
-            try {
-                PeerComms.sleep(SLEEP);
-                System.out.println("Sleeping comms");
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            dPacket = null;
-            
             } catch (SocketException ex) {
                 Logger.getLogger(PeerComms.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnknownHostException ex) {
@@ -101,6 +114,7 @@ public class PeerComms extends Thread {
         DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
         try {
             dSocket.send(dPacket);
+            localPeerNode.setVectorTimeStamp();
             System.out.println("send leaving notification to p2p network");
             System.out.println("packet sent = " + Longs.fromByteArray(dPacket.getData()));
         } catch (IOException ex) {

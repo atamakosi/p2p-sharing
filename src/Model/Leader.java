@@ -38,13 +38,17 @@ public class Leader extends Thread {
     //reference to the peer who is leader.  can be set to localhost.
     private InetAddress leader;
     //reference to local client to pass leader data when a new leader is found.
-    private PeerNode node;
+    private static PeerNode localPeerNode;
     
     private boolean run = true;
     
-    public Leader(PeerNode node) {
+    /**
+     * 
+     * @param node 
+     */
+    public Leader(PeerNode localPeerNode) {
         this.ownID = Runtime.getRuntime().freeMemory();
-        this.node = node;
+        this.localPeerNode = localPeerNode;
         try {
             serverSocket = new MulticastSocket(DEST_PORT);
             group = InetAddress.getByName(GROUP);
@@ -74,7 +78,7 @@ public class Leader extends Thread {
         long id;
         while (run)  {
             try {
-                buffer = new byte[1024];
+                buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 while (serverSocket != null)    {
                     serverSocket.receive(packet);
@@ -83,7 +87,11 @@ public class Leader extends Thread {
                     if (id < ownID ) {
                         startElection();
                     }   else    {
-                        node.setLeader(packet.getAddress());
+                        localPeerNode.setLeader(packet.getAddress());
+                        long timestamp = Longs.fromBytes(buffer[9], buffer[10], buffer[11],
+                                buffer[12], buffer[13], buffer[14], buffer[15], buffer[16]);
+                        System.out.println("received update for leader " + timestamp);
+                        localPeerNode.updateVectorForPeer(packet.getAddress().getHostAddress(), timestamp);
                     }   
                 }
                 buffer = null;
@@ -105,7 +113,17 @@ public class Leader extends Thread {
      */
     public void startElection() {
         participant = true;
-        byte[] msg = Longs.toByteArray(ownID);
+        byte[] msg = new byte[256];
+        byte[] longByte = Longs.toByteArray(ownID);
+        for (int i =0; i < longByte.length; i++)    {
+            msg[i] = longByte[i];
+        }
+        System.out.println("free memory msg length = " + msg.length);
+        byte[] timestamp = Longs.toByteArray(localPeerNode.getVectorTimeStamp());
+        for (int i = 0; i < timestamp.length; i++)  {
+            msg[i + 9] = timestamp[i];
+        }
+        localPeerNode.setVectorTimeStamp();
         sendPacket(msg);
     }
 
@@ -115,7 +133,6 @@ public class Leader extends Thread {
      */
     private void sendPacket(byte[] buffer)   {
         try {
-            
             DatagramPacket dPacket = new DatagramPacket(buffer, buffer.length, group, DEST_PORT);
             DatagramSocket dSocket = new DatagramSocket();
             dSocket.send(dPacket);

@@ -4,6 +4,7 @@
  */
 package Model;
 
+import com.google.common.primitives.Longs;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
@@ -18,15 +19,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class used to pass local socket information to peers.  Goal is to allow a peer 
- * to store discovered peers in a data collection.
+ * primary class used to start threads for networking and holding references to
+ * other peers.  
  * @author mcnabba
  */
 public class PeerNode implements PeerListener {
        
     private final int PORT = 33000;
     private Map<String, PeerNode> peers;
-    private boolean run = true;
     public String address;
     private Thread commsThread;
     private PeerComms pComms;
@@ -35,16 +35,22 @@ public class PeerNode implements PeerListener {
     private InetAddress leader = null;
     private RMIFileServer fileServer;
     private Leader leaderSelection;
+    private Map<PeerNode, Long> vectorStamps;
+    private long time = 0;
 
     public PeerNode()   {
         peers = new HashMap<>();
+        //initialize the vector collection
+        vectorStamps = new HashMap<>();
+        //begins this vector at zero
+        vectorStamps.put(this, time);
         pDisc = new PeerDiscovery(this);
         try {
             address = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException ex) {
             Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
         }
-        pComms = new PeerComms();
+        pComms = new PeerComms(this);
         leaderSelection = new Leader(this);
         observers = new ArrayList<>();
         try {
@@ -52,10 +58,23 @@ public class PeerNode implements PeerListener {
             System.out.println("RMI server up.");
         } catch (RemoteException e) {
             System.err.println("Error making the rmi server: " );
-            e.printStackTrace();
         }
     }
 
+    public synchronized long getVectorTimeStamp()    {
+        return this.vectorStamps.get(this);
+    }
+    
+    public synchronized void setVectorTimeStamp()    {
+        System.out.println("updating timestamp in node");
+        this.vectorStamps.put(this, time++);
+    }
+    
+    public synchronized void updateVectorForPeer(String address, long timestamp) {
+        System.out.println("received timestamp at peer node = " + timestamp);
+        this.vectorStamps.put(peers.get(address), timestamp);
+    }
+    
     /**
      * constructor to store incoming Peer connections.  
      * @param address
@@ -64,6 +83,9 @@ public class PeerNode implements PeerListener {
         this.address = address;
     }
 
+    /**
+     * stops threads infinite loops
+     */
     public void stopSockets()  {
         pComms.requestStop();
         pDisc.requestStop();
@@ -72,6 +94,9 @@ public class PeerNode implements PeerListener {
         notifyListeners();
     }
     
+    /**
+     * kills threads if not dead already
+     */
     public void stopThreads()   {
         try {
             pComms.join();
@@ -90,21 +115,26 @@ public class PeerNode implements PeerListener {
         return this.address;
     }
     
-    public boolean addPeerNode(PeerNode n) {
+    public boolean addPeerNode(PeerNode n, byte[] byteArray) {
         String nodeAddress = n.toString();
+        long timestamp = Longs.fromBytes(byteArray[9], byteArray[10], byteArray[11], 
+                byteArray[12], byteArray[13], byteArray[14], byteArray[15], byteArray[16]);
+        System.out.println("Timestamp of received message when adding peer node = " + timestamp);
+        System.out.println("local timestamp = " + time);
         if (!peers.containsKey(nodeAddress))  {
             peers.put(n.getAddress(), n);
+            vectorStamps.put(peers.get(n.getAddress()), timestamp);
             System.out.println("Peer added to Map");
             notifyListeners();
             return true;
         }   else    {
-            System.out.println("Peer rejected : " + n.toString());
+            vectorStamps.put(peers.get(n.getAddress()), timestamp);
             return false;
         }
     }
     
     public void removePeerNode(PeerNode n)  {
-        peers.remove(n);
+        peers.remove(n.toString());
         notifyListeners();
     }
 
@@ -113,8 +143,6 @@ public class PeerNode implements PeerListener {
         ArrayList<String> al = new ArrayList<>();
         String fcip = "";
         while (it.hasNext()) {
-            //System.out.println("New file client: " + it.next().toString());
-            
             try {
                 fcip = it.next().toString();
                 RMIFileClient fc = new RMIFileClient(fcip);
@@ -122,10 +150,8 @@ public class PeerNode implements PeerListener {
                 al.addAll(Arrays.asList(list));
             } catch (RemoteException e) {
                 System.out.println("Had RemoteException generating client " + fcip);
-                e.printStackTrace();;
             } catch (NotBoundException e) {
                 System.out.println("Had NotBoundException generating client " + fcip);
-                e.printStackTrace();
             }
         }
         return al;
@@ -146,7 +172,7 @@ public class PeerNode implements PeerListener {
         if (!pComms.isAlive() || 
                 !pDisc.isAlive() || 
                     !leaderSelection.isAlive()) {
-            pComms = new PeerComms();
+            pComms = new PeerComms(this);
             pDisc = new PeerDiscovery(this);
             leaderSelection = new Leader(this);
         }

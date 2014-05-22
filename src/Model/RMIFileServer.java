@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 public class RMIFileServer implements RMIFileInterface {
 
@@ -38,15 +37,5 @@ public class RMIFileServer implements RMIFileInterface {
 		}
 		return f;
 	}
-        
-        /*
-	public static void main(String[] args) {
-		try {
-			RMIFileServer fs = new RMIFileServer("/home/joel/temp");
-		} catch (RemoteException e) {
-			System.err.println("Unable to bind to regsitry: " + e);
-		}
-		System.out.println("Main Method of FileServer done");
-	}*/
 }
 

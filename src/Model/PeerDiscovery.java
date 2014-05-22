@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class PeerDiscovery extends Thread {
 
-    private PeerNode localPeerNode;
+    private static PeerNode localPeerNode;
     private volatile boolean run = true;
     private final int PORT = 33000;
     private final String GROUP = "224.0.0.2";
@@ -65,15 +65,16 @@ public class PeerDiscovery extends Thread {
             try {
                 buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                
                 while (!serverSocket.isClosed() )    {
                     serverSocket.receive(packet);
                     p = new PeerNode(packet.getAddress().getHostAddress());
-                    exists = localPeerNode.addPeerNode(p);
+                    exists = localPeerNode.addPeerNode(p, buffer);
                     if ( exists && (Longs.fromByteArray(packet.getData()) == 999999))   {
                         System.out.println("Received P2P removal request");
                         localPeerNode.removePeerNode(p);
                     }
-                    buffer = null;
+//                    buffer = null;
                 }
             } catch (IOException ex) {
                 Logger.getLogger(PeerNode.class.getName()).log(Level.SEVERE, null, ex);
