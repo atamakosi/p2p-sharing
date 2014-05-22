@@ -16,9 +16,7 @@ public class Main {
     private static final int PORT = 33000;
         
     public static void main(String[] args)  {
-        PeerNode p = new PeerNode();
-        System.out.println("local Node ID: " + p.toString());
-        
+        PeerNode p = new PeerNode();       
         MainUI ui = new MainUI();
         ui.setVisible(true);
         ui.setNode(p);
