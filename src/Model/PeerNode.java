@@ -92,7 +92,7 @@ public class PeerNode implements PeerListener {
     
     public boolean addPeerNode(PeerNode n) {
         String nodeAddress = n.toString();
-        if (!peers.containsKey(nodeAddress) && nodeAddress.equalsIgnoreCase(address))  {
+        if (!peers.containsKey(nodeAddress))  {
             peers.put(n.getAddress(), n);
             System.out.println("Peer added to Map");
             notifyListeners();
