@@ -32,11 +32,12 @@ public class RMIFileClient {
 		newFile += "files" + System.getProperty("file.separator");
 		newFile += name;
 		File outFile = new File(newFile);
-                System.out.println("File is " + outFile.getAbsolutePath());
+                System.out.println("Out file is " + outFile.getAbsolutePath());
                 if (!outFile.exists()) {
                     outFile.createNewFile();
                     System.out.println("File created");
                 }
+                System.out.println("In file is " + inFile.getAbsolutePath());
 		InputStream inStream = new FileInputStream(inFile);
 		OutputStream outStream = new FileOutputStream(outFile);
 		byte[] buf = new byte[1024];
