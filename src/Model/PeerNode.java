@@ -192,6 +192,7 @@ public class PeerNode implements PeerListener {
             isLeader = (this.leader == InetAddress.getLocalHost());
         } catch (Exception e) {
             System.out.println("Trying to check leader");
+            e.printStackTrace();
         }
         return isLeader;
     }
