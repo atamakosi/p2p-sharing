@@ -137,10 +137,10 @@ public class PeerNode implements PeerListener {
     public void getFileFromServer(String ip, String filename) {
         //needs to be implemented
         //System.out.println("hasn't been implemented yet");
-        if (ip.equals(address)) {
+        /*if (ip.equals(address)) {
             System.out.println("That is already your file stupid.");
             System.out.println("Retreival cancelled!");
-        } else {
+        } else {*/
             try {
                 RMIFileClient fc = new RMIFileClient(ip);
                 fc.getRemoteFile(filename);
@@ -148,7 +148,7 @@ public class PeerNode implements PeerListener {
                 System.out.println("Trouble getting file from client " + ip);
                 e.printStackTrace();
             }
-        }
+        //}
     }
   
     

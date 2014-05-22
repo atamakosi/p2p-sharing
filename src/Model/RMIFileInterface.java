@@ -1,12 +1,15 @@
 package Model;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.io.IOException;
-import java.io.File;
 
 public interface RMIFileInterface extends Remote {
 	
 	public String[] getFileList() throws RemoteException;
-	public File getFile(String fileName) throws RemoteException, IOException;
+	public byte[] getFile(String fileName) throws RemoteException, IOException;
 }

@@ -1,11 +1,13 @@
 package Model;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 public class RMIFileServer implements RMIFileInterface {
 
@@ -28,15 +30,23 @@ public class RMIFileServer implements RMIFileInterface {
 	}
 
         @Override
-	public File getFile(String fileName) {
-		File f = null;
+	public byte[] getFile(String fileName) {
 		String file = this.fileDirectory + System.getProperty("file.separator")
 			+ fileName;
 		File temp = new File(file);
+		BufferedInputStream f = null;
+                byte[] buffer = new byte[(int) temp.length()];
+                System.out.println("Server: file is " + temp.getAbsolutePath());
 		if (temp.exists() && !temp.isDirectory()) {
-			f = temp;
+                    try {
+			f = new BufferedInputStream(new FileInputStream(temp));
+                        f.read(buffer, 0, buffer.length);
+                    } catch (Exception e) {
+                        System.out.println("Problem creating input stream");
+                        e.printStackTrace();
+                    }
 		}
-		return f;
+		return buffer;
 	}
         
         /*
