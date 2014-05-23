@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 
 /**
  *
@@ -57,6 +58,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JScrollPane peerScroll;
     private JScrollPane fileScroll;
     private JLabel leaderLbl;
+    private final JLabel timeLabel;
     
     /**
      * Creates new form MainUI
@@ -108,6 +110,15 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 searchFileNames();
             }
         });
+        timeLabel = new JLabel("time bitches");
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeLabel.setText("Time since Epoch: " + node.getClockTime());
+            }
+        });
+        
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
@@ -143,7 +154,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         fileList.setLayoutOrientation(JList.VERTICAL);
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fileScroll = new JScrollPane(fileList);
-        filePnl.add(fileScroll);
+        filePnl.add(fileScroll, BorderLayout.CENTER);
+        filePnl.add(timeLabel, BorderLayout.SOUTH);
      
         peerPnl = new JPanel();
         peerPnl.setLayout(new BorderLayout());
@@ -162,6 +174,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);
         this.add(contentPnl);
+        
+        timer.start();
     }
 
     public void setNode(PeerNode node)  {
@@ -227,7 +241,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         }
         if (!found) {
             final JDialog searchResult = new JDialog();
-            searchResult.setSize(100, 100);
+            searchResult.setSize(200, 100);
             searchResult.setLayout(new BorderLayout());
             JPanel searchPnl = new JPanel();
             JLabel result = new JLabel("No results found!");
