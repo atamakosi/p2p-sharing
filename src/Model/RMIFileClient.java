@@ -30,7 +30,7 @@ public class RMIFileClient {
 
 	public void getRemoteFile(String name) throws IOException {
 		byte[] in = fi.getFile(name);
-		String newFile = System.getProperty("user.dir");
+		String newFile = System.getProperty("user.home");
 		newFile += System.getProperty("file.separator");
 		newFile += "files" + System.getProperty("file.separator");
 		newFile += name;

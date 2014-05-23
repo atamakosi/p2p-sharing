@@ -197,19 +197,33 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         System.out.println("String in search = " + searchString);
         boolean found = false;
         Iterator servers = node.getFileList().iterator();
+        fileListModel.removeAllElements(); //remove if yo go back
         while (servers.hasNext()) {
             FileServerList fileList = (FileServerList) servers.next();
+            Iterator files = fileList.iterator();
+            while (files.hasNext()) {
+                String temp = (String) files.next();
+                System.out.println("Testing against " + temp);
+                if (temp.matches("/([a-zA-Z0-9.\\-_])*" +
+                        "swi" + "([a-zA-Z0-9.\\-_])*\\w+/g")) {
+                    fileListModel.addElement(temp);
+                    System.out.println("Found match " + temp);
+                    found = true;
+                }
+            }
+            /*
             if (fileList.contains(searchString)) {
                 fileListModel.removeAllElements();
                 fileListModel.addElement(fileList.get(fileList.indexOf(searchString)));
-                filePnl.repaint();
+                //filePnl.repaint();
                 found = true;
-                break;
-            }
+                //break;
+            }*/
         }
+        filePnl.repaint();
         if (!found) {
             final JDialog searchResult = new JDialog();
-            searchResult.setSize(100, 100);
+            searchResult.setSize(200, 100);
             searchResult.setLayout(new BorderLayout());
             JPanel searchPnl = new JPanel();
             JLabel result = new JLabel("No results found!");

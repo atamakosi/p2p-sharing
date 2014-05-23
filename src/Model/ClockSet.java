@@ -43,6 +43,7 @@ public class ClockSet extends Thread {
     private void checkTime() {
         while (run) {
             try {
+                Thread.sleep(10000);
                 if (node.isLeader()) {
                     Iterator it = node.getPeers().values().iterator();
                     while(it.hasNext()) {
@@ -54,13 +55,14 @@ public class ClockSet extends Thread {
                 } else {
                     System.out.println("Guess i'm not leader :(");
                 }
-                Thread.sleep(10000);
+                
             } catch (Exception e) {
                 System.out.println("Trouble gettting time difference");
                 e.printStackTrace();
             }
             
         }
+        
     }
     
     public long getTimeFromServer(String fcip) throws RemoteException, NotBoundException {

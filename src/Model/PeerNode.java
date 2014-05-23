@@ -165,13 +165,7 @@ public class PeerNode implements PeerListener {
         return servers;
     }
     
-    public InetAddress getLeader() {
-        return this.leader;
-    }
-    
     public void getFileFromServer(String ip, String filename) {
-        //needs to be implemented
-        //System.out.println("hasn't been implemented yet");
         if (ip.equals(address)) {
             System.out.println("That is already your file stupid.");
             System.out.println("Retreival cancelled!");
@@ -190,10 +184,13 @@ public class PeerNode implements PeerListener {
         boolean isLeader = false;
         try {
             isLeader = (this.leader == InetAddress.getLocalHost());
+            if (this.leader == null)
+                System.out.println("Leader is null");
         } catch (Exception e) {
-            System.out.println("Trying to check leader");
+            System.out.println("Error trying to check leader");
             e.printStackTrace();
         }
+        //System.out.println("The leader is " + this.leader.getHostAddress());
         return isLeader;
     }
     
