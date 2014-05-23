@@ -90,11 +90,13 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
        	g.setColor(Color.WHITE);
        	g.fillRect(0,0,1500,1500);
        	g.setColor(Color.BLACK);
+        
 
     	//draws the edges, calls method edge for each edge to be drawn
         Node n;
      	for(int j=0; j < adjList.size(); j++){
             n = adjList.get(j);
+            n.draw(g);
             for(int i=0; i < n.edges.length; i++){
                 edge(n.nodeNum,adjList.get(n.edges[i]).nodeNum,g);
             }
@@ -194,11 +196,11 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
     /**
      * 
      */
-    public class Node   {
+    private class Node   {
 
         public int xpos;
         public int ypos;
-        public int[] edges; //nodes this node points to
+        public int[] edges; 
         public int nodeNum;
         public Point circleCenter;
         public ArrayList<Point> anchorPoints;
