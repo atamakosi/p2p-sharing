@@ -12,10 +12,10 @@ import Model.PeerNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -30,7 +30,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
 
 /**
  *
@@ -57,6 +56,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private DefaultListModel peerListModel;
     private JScrollPane peerScroll;
     private JScrollPane fileScroll;
+    private JLabel leaderLbl;
     
     /**
      * Creates new form MainUI
@@ -111,6 +111,23 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
+        searchFld.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)    {
+                    searchFileNames();
+                }
+            }
+        });
         toolBar.add(refreshBtn);
         toolBar.add(getBtn);
         toolBar.add(putBtn);
@@ -136,8 +153,10 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         peerList = new JList(peerListModel);
         peerList.setLayoutOrientation(JList.VERTICAL);
         peerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        leaderLbl = new JLabel();
         peerScroll = new JScrollPane(peerList);
-        peerPnl.add(peerScroll);
+        peerPnl.add(peerScroll, BorderLayout.CENTER);
+        peerPnl.add(leaderLbl, BorderLayout.SOUTH);
 
         contentPnl.add(toolBar, BorderLayout.NORTH);
         contentPnl.add(peerPnl, BorderLayout.WEST);
@@ -151,7 +170,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     }
     
     @Override
-    public void update(Map<String, PeerNode> peers) {
+    public synchronized void update(Map<String, PeerNode> peers) {
         //Add new peers to ui
         peerListModel.removeAllElements();
         fileListModel.removeAllElements();
@@ -171,8 +190,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 fileListModel.addElement(str);
             }
         }
-//        filePnl.repaint();
-//        peerPnl.repaint();
+        leaderLbl.setText(node.getLeader().toString());
         this.revalidate();
     }
     
@@ -259,7 +277,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         disconnectItm = new javax.swing.JMenuItem();
         exitItm = new javax.swing.JMenuItem();
         editMnu = new javax.swing.JMenu();
-        settingsItm = new javax.swing.JMenuItem();
         debugItm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -293,9 +310,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         menuBar.add(fileMnu);
 
         editMnu.setText("Edit");
-
-        settingsItm.setText("Settings");
-        editMnu.add(settingsItm);
 
         debugItm.setText("Debug");
         debugItm.addActionListener(new java.awt.event.ActionListener() {
@@ -338,7 +352,9 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_disconnectItmActionPerformed
 
     private void debugItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugItmActionPerformed
-        // TODO add your handling code here:
+        JDialog topDlg = new JDialog();
+        topDlg.add(new TopologyUI(node));
+        topDlg.setVisible(true);
     }//GEN-LAST:event_debugItmActionPerformed
 
     /**
@@ -385,7 +401,6 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileMnu;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem settingsItm;
     // End of variables declaration//GEN-END:variables
 
     

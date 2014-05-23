@@ -39,7 +39,7 @@ public class PeerNode implements PeerListener {
     private long time = 0;
     private ClockSet clock;
     private ArrayList<FileServerList> servers; //contains list of servers and there respective files.
-
+    
     public PeerNode()   {
         peers = new HashMap<>();
         //initialize the vector collection
@@ -220,6 +220,11 @@ public class PeerNode implements PeerListener {
     
     public void setLeader(InetAddress leader)   {
         this.leader = leader;
+        notifyListeners();
+    }
+    
+    public InetAddress getLeader()  {
+        return this.leader;
     }
     
     @Override

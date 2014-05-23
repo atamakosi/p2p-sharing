@@ -40,11 +40,6 @@
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="settingsItm">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Settings"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="debugItm">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Debug"/>
