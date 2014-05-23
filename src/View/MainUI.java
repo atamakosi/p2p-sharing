@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 
 /**
  *
@@ -57,13 +58,14 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private JScrollPane peerScroll;
     private JScrollPane fileScroll;
     private JLabel leaderLbl;
+    private final JLabel timeLabel;
     
     /**
      * Creates new form MainUI
      */
     public MainUI() {
         initComponents();
-        setSize(600,600);
+        setSize(400,600);
         connectItm.setEnabled(false);
         contentPnl = new JPanel();
         contentPnl.setLayout(new BorderLayout());
@@ -108,6 +110,15 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 searchFileNames();
             }
         });
+        timeLabel = new JLabel("time bitches");
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeLabel.setText("Time since Epoch: " + node.getClockTime());
+            }
+        });
+        
         searchFld = new JTextField();
         searchFld.setSize(100, WIDTH);
         searchFld.setToolTipText("Search...");
@@ -143,7 +154,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         fileList.setLayoutOrientation(JList.VERTICAL);
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fileScroll = new JScrollPane(fileList);
-        filePnl.add(fileScroll);
+        filePnl.add(fileScroll, BorderLayout.CENTER);
+        filePnl.add(timeLabel, BorderLayout.SOUTH);
      
         peerPnl = new JPanel();
         peerPnl.setLayout(new BorderLayout());
@@ -162,6 +174,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         contentPnl.add(peerPnl, BorderLayout.WEST);
         contentPnl.add(filePnl, BorderLayout.CENTER);
         this.add(contentPnl);
+        
+        timer.start();
     }
 
     public void setNode(PeerNode node)  {
@@ -215,30 +229,16 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         System.out.println("String in search = " + searchString);
         boolean found = false;
         Iterator servers = node.getFileList().iterator();
-        fileListModel.removeAllElements(); //remove if yo go back
         while (servers.hasNext()) {
             FileServerList fileList = (FileServerList) servers.next();
-            Iterator files = fileList.iterator();
-            while (files.hasNext()) {
-                String temp = (String) files.next();
-                System.out.println("Testing against " + temp);
-                if (temp.matches("/([a-zA-Z0-9.\\-_])*" +
-                        "swi" + "([a-zA-Z0-9.\\-_])*\\w+/g")) {
-                    fileListModel.addElement(temp);
-                    System.out.println("Found match " + temp);
-                    found = true;
-                }
-            }
-            /*
             if (fileList.contains(searchString)) {
                 fileListModel.removeAllElements();
                 fileListModel.addElement(fileList.get(fileList.indexOf(searchString)));
-                //filePnl.repaint();
+                filePnl.repaint();
                 found = true;
-                //break;
-            }*/
+                break;
+            }
         }
-        filePnl.repaint();
         if (!found) {
             final JDialog searchResult = new JDialog();
             searchResult.setSize(200, 100);

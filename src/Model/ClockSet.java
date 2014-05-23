@@ -27,12 +27,13 @@ public class ClockSet extends Thread {
         node = n;
     }
     
-    public double getOut() {
+    public long getOut() {
         return out;
     }
     
     public void setOut(long o) {
-        this.out = o;
+        long temp = out + o;
+        this.out = temp;
     }
     
     @Override
@@ -47,10 +48,12 @@ public class ClockSet extends Thread {
                 if (node.isLeader()) {
                     Iterator it = node.getPeers().values().iterator();
                     while(it.hasNext()) {
-                        System.out.println("Checking time.");
                         String ip = it.next().toString();
-                        long difference = getTimeFromServer(ip);
-                        setAdjustedTime(difference/2, ip);
+                        if (!ip.equals(node.address)) {
+                            System.out.println("Checking time.");
+                            long difference = getTimeFromServer(ip);
+                            setAdjustedTime(difference/2, ip);
+                        }
                     }
                 } else {
                     System.out.println("Guess i'm not leader :(");
@@ -60,9 +63,18 @@ public class ClockSet extends Thread {
                 System.out.println("Trouble gettting time difference");
                 e.printStackTrace();
             }
-            
+            Date d = new Date();
+            long localTime = d.getTime();
+            System.out.println("Clock out by " + out);
+            System.out.println("Time on this computer is " + (localTime + out));
         }
         
+    }
+    
+    public long getTime() {
+        Date d = new Date();
+        long localTime = d.getTime();
+        return localTime + out;
     }
     
     public long getTimeFromServer(String fcip) throws RemoteException, NotBoundException {

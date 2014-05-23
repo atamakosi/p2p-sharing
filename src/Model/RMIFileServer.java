@@ -55,7 +55,7 @@ public class RMIFileServer implements RMIFileInterface {
         @Override
         public long getTime() {
             Date d = new Date();
-            return d.getTime();
+            return (d.getTime()+clock.getOut());
         }
         
         @Override

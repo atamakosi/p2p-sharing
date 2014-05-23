@@ -180,10 +180,14 @@ public class PeerNode implements PeerListener {
         }
     }
     
+    public long getClockTime() {
+        return this.clock.getTime();
+    }
+    
     public boolean isLeader() {
         boolean isLeader = false;
         try {
-            isLeader = (this.leader == InetAddress.getLocalHost());
+            isLeader = (this.leader.toString().equals("/"+InetAddress.getLocalHost().getHostAddress()));
             if (this.leader == null)
                 System.out.println("Leader is null");
         } catch (Exception e) {
