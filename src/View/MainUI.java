@@ -340,6 +340,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private void debugItmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugItmActionPerformed
         JDialog topDlg = new JDialog();
         topDlg.add(new TopologyUI(node));
+        topDlg.setSize(500,500);
         topDlg.setVisible(true);
     }//GEN-LAST:event_debugItmActionPerformed
 

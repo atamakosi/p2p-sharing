@@ -103,7 +103,12 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
     }
 
 
-    //  draws an edge between two nodes.
+    /**
+     * draws an edge between two nodes.
+     * @param node1
+     * @param node2
+     * @param g 
+     */
     public void edge(int node1, int node2, Graphics g){
         int startX = adjList.get(node1).circleCenter.x;
         int startY = adjList.get(node1).circleCenter.y;
@@ -124,7 +129,13 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
 
      }
 
-    //draws the arrows on the edges
+    /**
+     * draws the arrows on the edges
+     * @param g2
+     * @param theta
+     * @param x0
+     * @param y0 
+     */
     private void drawArrow(Graphics2D g2, double theta, double x0, double y0){
         double x = x0 - barb * Math.cos(theta + phi);
         double y = y0 - barb * Math.sin(theta + phi);
@@ -135,7 +146,10 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
     }
 
 
-     //Mouse Actions
+    /**
+     * Mouse Actions
+     * @param e 
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
          if(moveNode>=0){
