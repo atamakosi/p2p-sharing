@@ -22,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -110,8 +111,8 @@ public class MainUI extends javax.swing.JFrame implements Observer {
                 searchFileNames();
             }
         });
-        timeLabel = new JLabel("time bitches");
-        Timer timer = new Timer(1000, new ActionListener() {
+        timeLabel = new JLabel();
+        Timer timer = new Timer(600, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -273,6 +274,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
 
         menuBar = new javax.swing.JMenuBar();
         fileMnu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         connectItm = new javax.swing.JMenuItem();
         disconnectItm = new javax.swing.JMenuItem();
         exitItm = new javax.swing.JMenuItem();
@@ -282,6 +284,15 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         fileMnu.setText("File");
+
+        jMenuItem1.setText("View Topology");
+        jMenuItem1.setToolTipText("");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMnu.add(jMenuItem1);
 
         connectItm.setText("Connect...");
         connectItm.addActionListener(new java.awt.event.ActionListener() {
@@ -358,6 +369,20 @@ public class MainUI extends javax.swing.JFrame implements Observer {
         topDlg.setVisible(true);
     }//GEN-LAST:event_debugItmActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame f = new JFrame("Topology");
+                f.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+                f.setSize(600, 600);
+                TopologyUI topo = new TopologyUI(node);
+                f.add(topo);
+                f.setVisible(true);
+            }
+        });
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -401,6 +426,7 @@ public class MainUI extends javax.swing.JFrame implements Observer {
     private javax.swing.JMenu editMnu;
     private javax.swing.JMenuItem exitItm;
     private javax.swing.JMenu fileMnu;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
