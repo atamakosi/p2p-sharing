@@ -55,7 +55,7 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
         for (Map.Entry<String, PeerNode> e : setList)
         {
             TopologyUI.Node newNode = new TopologyUI.Node();
-            newNode.nodeName = e.toString();
+            newNode.nodeName = e.getKey();
             System.out.println("New node " + newNode.nodeName);
             adjList.add(newNode);
             newNode.edges = new int[nodeList.size()];
@@ -71,7 +71,7 @@ public class TopologyUI extends javax.swing.JPanel implements MouseMotionListene
         for(TopologyUI.Node node : adjList){
             node.xpos=(int)(Math.random()*300);
             node.ypos=(int)(Math.random()*300);
-            node.circleCenter = new Point(xinc+(CIRCLEDIAMETER/2),yinc+(CIRCLEDIAMETER/2));
+            node.circleCenter = new Point(xinc+(CIRCLEDIAMETER),yinc+(CIRCLEDIAMETER/2));
         }
         moveNode=-1;
         startNode= 0;
